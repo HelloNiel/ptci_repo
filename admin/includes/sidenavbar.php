@@ -6,10 +6,19 @@
             <span class="nav-link-text">Dashboard</span>
         </a>
         <div class="sb-sidenav-menu-heading">Scoreboard</div>
-        <a class="nav-link" href="<?php echo "talentscoreboard.php"; ?>">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseScoreboard" aria-expanded="false" aria-controls="collapseScoreboard">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
             Talent Scoreboard
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
+        <div class="collapse" id="collapseScoreboard" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link" href="<?php echo "judge1.php"; ?>">Talent Judge 1</a>
+                <a class="nav-link" href="<?php echo "judge2.php"; ?>">Talent Judge 2</a>
+                <a class="nav-link" href="<?php echo "judge3.php"; ?>">Talent Judge 3</a>
+                <a class="nav-link" href="<?php echo "overall.php"; ?>">overall Score</a>
+            </nav>
+        </div>
         <div class="sb-sidenav-menu-heading">Settings</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStudents" aria-expanded="false" aria-controls="collapseStudents">
             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>

@@ -7,6 +7,9 @@
     <?php include 'includes/header.php'; ?>
 </head>
 <body>
+    <?php
+    session_start();
+    ?>
     <div id="layoutSidenav" class="flex-grow-1">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -20,9 +23,7 @@
             <div class="container mt-4">
                 <h1>Add Judge</h1>
 
-                <?php
-                session_start();
-                if (isset($_SESSION['success_message'])): ?>
+                <?php if (isset($_SESSION['success_message'])): ?>
                     <div class="alert alert-success" role="alert">
                         <?php
                         echo $_SESSION['success_message'];
