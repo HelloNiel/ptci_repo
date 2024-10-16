@@ -5,17 +5,17 @@ include '../../partial/connection.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!isset($_SESSION['jdg_id'])) {
         $_SESSION['error_message'] = "You must be logged in to submit scores.";
-        header("Location: ../maletalent.php");
+        header("Location: ../femaletalent.php");
         exit();
     }
 
     $jdg_id = $_SESSION['jdg_id'];
-    $table_name = "tal_judge1"; 
+    $table_name = "tal_judge1_female";
 
     if ($jdg_id == 35) {
-        $table_name = "tal_judge2";
+        $table_name = "tal_judge2_female";
     } elseif ($jdg_id == 36) {
-        $table_name = "tal_judge3";
+        $table_name = "tal_judge3_female";
     }
 
     $stmt = $conn->prepare("INSERT INTO $table_name (tal_mastery, tal_performance, tal_impression, tal_audience, tal_total_score, fullname, course, team, candidate_no, jdg_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -55,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close();
 
     $_SESSION['success_message'] = "Scores submitted successfully!";
-    header("Location: ../maletalent.php");
+    header("Location: ../femaletalent.php");
     exit();
 } else {
-    header("Location: ../maletalent.php");
+    header("Location: ../femaletalent.php");
     exit();
 }

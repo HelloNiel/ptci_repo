@@ -16,7 +16,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Overall Scores</h1>
+                    <h1 class="mt-4">Overall Scores - Male Candidates</h1>
 
                     <div class="card mb-4">
                         <div class="card-header">
@@ -52,6 +52,7 @@
                                                 SELECT candidate_no, tal_total_score FROM tal_judge3
                                             ) AS all_scores
                                             JOIN candidates c ON c.cand_no = all_scores.candidate_no
+                                            WHERE c.cand_gender = 'Male'  -- Filter for male candidates
                                             GROUP BY c.cand_no
                                         ) AS ranked_scores
                                     ";
@@ -70,9 +71,8 @@
                                     } else {
                                         echo "<tr><td colspan='4'>No data available</td></tr>";
                                     }
-
-                                    $conn->close();
                                     ?>
+
                                 </tbody>
                             </table>
                         </div>
@@ -109,6 +109,7 @@
                                         LEFT JOIN tal_judge1 j1 ON c.cand_no = j1.candidate_no
                                         LEFT JOIN tal_judge2 j2 ON c.cand_no = j2.candidate_no
                                         LEFT JOIN tal_judge3 j3 ON c.cand_no = j3.candidate_no
+                                        WHERE c.cand_gender = 'Male'  -- Filter for male candidates
                                     ";
 
                                     $result = $conn->query($sql);

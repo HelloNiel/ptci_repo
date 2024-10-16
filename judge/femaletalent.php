@@ -22,9 +22,9 @@ include '../partial/connection.php';
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Male Candidates</h1>
+                    <h1 class="mt-4">Female Candidates</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Male Candidates/Talent</li>
+                        <li class="breadcrumb-item active">Female Candidates/Talent</li>
                     </ol>
 
                     <?php
@@ -35,7 +35,7 @@ include '../partial/connection.php';
                     ?>
 
                     <div class="table-responsive">
-                        <form method="POST" action="./talent function/tal_score.php">
+                        <form method="POST" action="./talent function/tal_score_female.php">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>

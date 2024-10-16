@@ -30,6 +30,7 @@
                                         <th>Name</th>
                                         <th>Course</th>
                                         <th>Team</th>
+                                        <th>Gender</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -38,13 +39,14 @@
                                         <th>Name</th>
                                         <th>Course</th>
                                         <th>Team</th>
+                                        <th>Gender</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
                                     <?php
                                     include '../partial/connection.php';
 
-                                    $sql = "SELECT cand_no, CONCAT(cand_fn, ' ', cand_ln) AS name, cand_course, cand_team FROM candidates";
+                                    $sql = "SELECT cand_no, CONCAT(cand_fn, ' ', cand_ln) AS name, cand_course, cand_team, cand_gender FROM candidates";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
@@ -54,10 +56,11 @@
                                                     <td>" . $row['name'] . "</td>
                                                     <td>" . $row['cand_course'] . "</td>
                                                     <td>" . $row['cand_team'] . "</td>
+                                                    <td>" . $row['cand_gender'] . "</td>
                                                   </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='4'>No candidates found</td></tr>";
+                                        echo "<tr><td colspan='5'>No candidates found</td></tr>";
                                     }
                                     
                                     $conn->close();

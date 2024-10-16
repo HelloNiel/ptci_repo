@@ -18,7 +18,8 @@
                 <a class="nav-link" href="<?php echo "judge1.php"; ?>">Talent Judge 1</a>
                 <a class="nav-link" href="<?php echo "judge2.php"; ?>">Talent Judge 2</a>
                 <a class="nav-link" href="<?php echo "judge3.php"; ?>">Talent Judge 3</a>
-                <a class="nav-link" href="<?php echo "overall.php"; ?>">overall Score</a>
+                <a class="nav-link" href="<?php echo "overall.php"; ?>">overall Score male</a>
+                <a class="nav-link" href="<?php echo "overall_female.php"; ?>">overall Score female</a>
             </nav>
         </div>
         <div class="sb-sidenav-menu-heading">Settings</div>
