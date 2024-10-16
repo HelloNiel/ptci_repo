@@ -10,7 +10,9 @@
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
             Talent Scoreboard
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            
         </a>
+        
         <div class="collapse" id="collapseScoreboard" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
                 <a class="nav-link" href="<?php echo "judge1.php"; ?>">Talent Judge 1</a>

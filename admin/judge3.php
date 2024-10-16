@@ -41,10 +41,22 @@
                                     <?php
                                     include '../partial/connection.php';
 
-                                    $sql = "SELECT fullname, course, team, candidate_no, tal_mastery, tal_performance, tal_impression, tal_audience, tal_total_score FROM tal_judge3";
+                                    $sql = "
+                                        SELECT CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname,
+                                               c.cand_course AS course,
+                                               c.cand_team AS team,
+                                               j.candidate_no,
+                                               j.tal_mastery,
+                                               j.tal_performance,
+                                               j.tal_impression,
+                                               j.tal_audience,
+                                               j.tal_total_score
+                                        FROM tal_judge3 j
+                                        JOIN candidates c ON j.candidate_no = c.cand_no
+                                    ";
                                     $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
+                                    if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>{$row['fullname']}</td>

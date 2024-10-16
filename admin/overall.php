@@ -27,6 +27,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Rank</th>
                                         <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Overall Score</th>
@@ -37,32 +38,37 @@
                                     include '../partial/connection.php';
 
                                     $sql = "
-                                        SELECT c.cand_no AS candidate_no, 
-                                               CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname,
-                                               AVG(tal_total_score) AS overall_score 
+                                        SELECT candidate_no, fullname, overall_score, 
+                                               RANK() OVER (ORDER BY overall_score DESC) AS rank
                                         FROM (
-                                            SELECT candidate_no, tal_total_score FROM tal_judge1
-                                            UNION ALL
-                                            SELECT candidate_no, tal_total_score FROM tal_judge2
-                                            UNION ALL
-                                            SELECT candidate_no, tal_total_score FROM tal_judge3
-                                        ) AS all_scores
-                                        JOIN candidates c ON c.cand_no = all_scores.candidate_no
-                                        GROUP BY c.cand_no
+                                            SELECT c.cand_no AS candidate_no, 
+                                                   CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname,
+                                                   AVG(tal_total_score) AS overall_score 
+                                            FROM (
+                                                SELECT candidate_no, tal_total_score FROM tal_judge1
+                                                UNION ALL
+                                                SELECT candidate_no, tal_total_score FROM tal_judge2
+                                                UNION ALL
+                                                SELECT candidate_no, tal_total_score FROM tal_judge3
+                                            ) AS all_scores
+                                            JOIN candidates c ON c.cand_no = all_scores.candidate_no
+                                            GROUP BY c.cand_no
+                                        ) AS ranked_scores
                                     ";
 
                                     $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
+                                    if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
+                                                    <td>{$row['rank']}</td>
                                                     <td>{$row['candidate_no']}</td>
                                                     <td>{$row['fullname']}</td>
                                                     <td>" . number_format($row['overall_score'], 2) . "</td>
                                                   </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='3'>No data available</td></tr>";
+                                        echo "<tr><td colspan='4'>No data available</td></tr>";
                                     }
 
                                     $conn->close();
@@ -107,7 +113,7 @@
 
                                     $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
+                                    if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>{$row['fullname']} {$row['lastname']}</td>

@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $audience = (int)$_POST["audience_$cand_no"];
             $total_score = ($mastery + $performance + $impression + $audience) * 0.1;
 
-
             $query = $conn->prepare("SELECT cand_fn, cand_ln, cand_course, cand_team FROM candidates WHERE cand_no = ?");
             $query->bind_param("s", $cand_no);
             $query->execute();
