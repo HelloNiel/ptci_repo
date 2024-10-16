@@ -37,21 +37,16 @@
                                     <?php
                                     include '../partial/connection.php';
 
+                                    // Query for overall scores of male candidates
                                     $sql = "
                                         SELECT candidate_no, fullname, overall_score, 
                                                RANK() OVER (ORDER BY overall_score DESC) AS rank
                                         FROM (
                                             SELECT c.cand_no AS candidate_no, 
                                                    CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname,
-                                                   AVG(tal_total_score) AS overall_score 
-                                            FROM (
-                                                SELECT candidate_no, tal_total_score FROM tal_judge1
-                                                UNION ALL
-                                                SELECT candidate_no, tal_total_score FROM tal_judge2
-                                                UNION ALL
-                                                SELECT candidate_no, tal_total_score FROM tal_judge3
-                                            ) AS all_scores
-                                            JOIN candidates c ON c.cand_no = all_scores.candidate_no
+                                                   AVG(t.tal_total_score) AS overall_score 
+                                            FROM talent t
+                                            JOIN candidates c ON c.cand_no = t.candidate_no
                                             WHERE c.cand_gender = 'Male'  -- Filter for male candidates
                                             GROUP BY c.cand_no
                                         ) AS ranked_scores
@@ -72,7 +67,6 @@
                                         echo "<tr><td colspan='4'>No data available</td></tr>";
                                     }
                                     ?>
-
                                 </tbody>
                             </table>
                         </div>
@@ -98,18 +92,20 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    include '../partial/connection.php';
-
+                                    // Query to fetch scores from each judge for male candidates
                                     $sql = "
-                                        SELECT c.cand_fn AS fullname, c.cand_ln AS lastname, c.cand_course AS course, c.cand_team AS team, c.cand_no AS candidate_no,
-                                               j1.tal_total_score AS score_judge1,
-                                               j2.tal_total_score AS score_judge2,
-                                               j3.tal_total_score AS score_judge3
+                                        SELECT 
+                                            CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
+                                            c.cand_course AS course, 
+                                            c.cand_team AS team, 
+                                            c.cand_no AS candidate_no,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 34 THEN t.tal_total_score END), 0) AS score_judge1,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 35 THEN t.tal_total_score END), 0) AS score_judge2,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 36 THEN t.tal_total_score END), 0) AS score_judge3
                                         FROM candidates c
-                                        LEFT JOIN tal_judge1 j1 ON c.cand_no = j1.candidate_no
-                                        LEFT JOIN tal_judge2 j2 ON c.cand_no = j2.candidate_no
-                                        LEFT JOIN tal_judge3 j3 ON c.cand_no = j3.candidate_no
+                                        LEFT JOIN talent t ON c.cand_no = t.candidate_no
                                         WHERE c.cand_gender = 'Male'  -- Filter for male candidates
+                                        GROUP BY c.cand_no
                                     ";
 
                                     $result = $conn->query($sql);
@@ -117,7 +113,7 @@
                                     if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
-                                                    <td>{$row['fullname']} {$row['lastname']}</td>
+                                                    <td>{$row['fullname']}</td>
                                                     <td>{$row['course']}</td>
                                                     <td>{$row['team']}</td>
                                                     <td>{$row['candidate_no']}</td>
