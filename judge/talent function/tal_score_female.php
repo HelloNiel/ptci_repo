@@ -14,7 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare("INSERT INTO female_talent (tal_mastery, tal_performance, tal_impression, tal_audience, tal_total_score, fullname, course, team, candidate_no, cand_id, jdg_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if (!$stmt) {
-        die("Prepare failed: " . $conn->error);
+        $_SESSION['error_message'] = "Database error: Unable to prepare statement.";
+        header("Location: ../femaletalent.php");
+        exit();
+    }
+
+    if (empty($_POST)) {
+        $_SESSION['error_message'] = "No data received.";
+        header("Location: ../femaletalent.php");
+        exit();
     }
 
     foreach ($_POST as $key => $value) {
@@ -33,8 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $candidate = $result->fetch_assoc();
 
             if (!$candidate) {
-                echo "Candidate not found for candidate_no: $cand_no<br>";
-                continue;
+                $_SESSION['error_message'] = "Candidate not found for candidate_no: $cand_no.";
+                header("Location: ../femaletalent.php");
+                exit();
             }
 
             $fullname = $candidate['cand_fn'] . ' ' . $candidate['cand_ln'];
@@ -43,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("iiiiiissssi", $mastery, $performance, $impression, $audience, $total_score, $fullname, $candidate['cand_course'], $candidate['cand_team'], $cand_no, $cand_id, $jdg_id);
 
             if (!$stmt->execute()) {
-                echo "Error executing statement for candidate_no $cand_no: " . $stmt->error . "<br>";
+                $_SESSION['error_message'] = "Error executing statement for candidate_no $cand_no: " . $stmt->error;
+                header("Location: ../femaletalent.php");
+                exit();
             }
         }
     }

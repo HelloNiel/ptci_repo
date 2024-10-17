@@ -7,7 +7,7 @@ include '../partial/connection.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Male Candidates</title>
+    <title>Female Candidates</title>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -32,6 +32,10 @@ include '../partial/connection.php';
                         echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
                         unset($_SESSION['success_message']);
                     }
+                    if (isset($_SESSION['error_message'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error_message'] . '</div>';
+                        unset($_SESSION['error_message']);
+                    }
                     ?>
 
                     <div class="table-responsive">
@@ -39,6 +43,7 @@ include '../partial/connection.php';
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Candidate ID</th>
                                         <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Course</th>
@@ -51,12 +56,13 @@ include '../partial/connection.php';
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT cand_no, cand_ln, cand_fn, cand_course, cand_team FROM candidates WHERE cand_gender = 'Female'";
+                                    $sql = "SELECT cand_id, cand_no, cand_ln, cand_fn, cand_course, cand_team, cand_gender FROM candidates WHERE cand_gender = 'Female'";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>";
+                                            echo "<td>{$row['cand_id']}</td>";
                                             echo "<td>{$row['cand_no']}</td>";
                                             echo "<td>{$row['cand_fn']} {$row['cand_ln']}</td>";
                                             echo "<td>{$row['cand_course']}</td>";
@@ -68,7 +74,7 @@ include '../partial/connection.php';
                                             echo "</tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='8' class='text-center'>No male candidates found</td></tr>";
+                                        echo "<tr><td colspan='9' class='text-center'>No female candidates found</td></tr>";
                                     }
                                     ?>
                                 </tbody>
