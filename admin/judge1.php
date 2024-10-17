@@ -1,7 +1,17 @@
+<?php 
+session_start();
+include 'includes/header.php'; 
+
+// Check if the judge is logged in
+if (!isset($_SESSION['jdg_id'])) {
+    die("You must be logged in as a judge to view this page.");
+}
+
+$jdg_id = $_SESSION['jdg_id'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'includes/header.php'; ?>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -16,7 +26,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Judge 1</h1>
+                    <h1 class="mt-4">Judge <?php echo $jdg_id; ?></h1>
 
                     <div class="card mb-4">
                         <div class="card-header">
@@ -42,7 +52,6 @@
                                     <?php
                                     include '../partial/connection.php';
 
-                                    $jdg_id = 34;
                                     $stmt = $conn->prepare("
                                         SELECT 
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
@@ -55,8 +64,8 @@
                                             MAX(t.tal_audience) AS tal_audience, 
                                             MAX(t.tal_total_score) AS tal_total_score
                                         FROM male_talent t
-                                        JOIN candidates c ON t.candidate_no = c.cand_no
-                                        WHERE t.jdg_id = ? AND c.cand_gender = 'male'
+                                        JOIN candidates c ON t.cand_id = c.cand_id
+                                        WHERE t.jdg_id = ? AND c.cand_gender = 'Male'
                                         GROUP BY t.candidate_no
                                         ORDER BY t.candidate_no
                                     ");
@@ -81,7 +90,6 @@
                                     } else {
                                         echo "<tr><td colspan='9'>No male candidates found for this judge</td></tr>";
                                     }
-
                                     $stmt->close();
                                     ?>
                                 </tbody>
@@ -123,8 +131,8 @@
                                             MAX(t.tal_audience) AS tal_audience, 
                                             MAX(t.tal_total_score) AS tal_total_score
                                         FROM female_talent t
-                                        JOIN candidates c ON t.candidate_no = c.cand_no
-                                        WHERE t.jdg_id = ? AND c.cand_gender = 'female'
+                                        JOIN candidates c ON t.cand_id = c.cand_id
+                                        WHERE t.jdg_id = ? AND c.cand_gender = 'Female'
                                         GROUP BY t.candidate_no
                                         ORDER BY t.candidate_no
                                     ");

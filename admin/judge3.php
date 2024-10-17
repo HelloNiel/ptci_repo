@@ -21,9 +21,8 @@
                     <?php
                     include '../partial/connection.php';
 
-                    $jdg_id = 36; 
+                    $jdg_id = 43; 
 
-                    // Function to display candidate scores
                     function displayCandidatesScores($gender, $jdg_id) {
                         global $conn;
                         $table_name = $gender === 'Female' ? 'female_talent' : 'male_talent';
@@ -66,7 +65,6 @@
                         $stmt->close();
                     }
 
-                    // Male Candidates Scores Table
                     echo '<div class="card mb-4">';
                     echo '<div class="card-header"><i class="fas fa-table me-1"></i> Male Candidates Scores</div>';
                     echo '<div class="card-body">';
@@ -84,7 +82,6 @@
                     displayCandidatesScores('Male', $jdg_id);
                     echo '</tbody></table></div></div>';
 
-                    // Female Candidates Scores Table
                     echo '<div class="card mb-4">';
                     echo '<div class="card-header"><i class="fas fa-table me-1"></i> Female Candidates Scores</div>';
                     echo '<div class="card-body">';

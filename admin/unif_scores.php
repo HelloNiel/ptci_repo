@@ -17,7 +17,6 @@
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Uniform Scores</h1>
-
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -73,6 +72,7 @@
                                         WHERE c.cand_gender = 'male'
                                         GROUP BY c.cand_no
                                     ";
+
                                     $result = $conn->query($query);
                                     if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
@@ -96,7 +96,6 @@
                         </div>
                     </div>
 
-                    <!-- Female Candidates Table -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -132,6 +131,7 @@
                                         WHERE c.cand_gender = 'Female'
                                         GROUP BY c.cand_no
                                     ";
+
                                     $result_female = $conn->query($query_female);
                                     if ($result_female && $result_female->num_rows > 0) {
                                         while ($row_female = $result_female->fetch_assoc()) {

@@ -21,7 +21,7 @@
                     <?php
                     include '../partial/connection.php';
 
-                    $jdg_id = 35; 
+                    $jdg_id = 42; 
 
                     function displayCandidatesScores($gender, $jdg_id) {
                         global $conn;
