@@ -21,7 +21,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Candidates Scores
+                            Male Candidates Scores
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -42,20 +42,23 @@
                                     <?php
                                     include '../partial/connection.php';
 
-                                    $jdg_id = 34; // Judge ID
+                                    $jdg_id = 34;
                                     $stmt = $conn->prepare("
-                                        SELECT CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
-                                               t.tal_mastery, 
-                                               t.tal_performance, 
-                                               t.tal_impression, 
-                                               t.tal_audience, 
-                                               t.tal_total_score, 
-                                               t.candidate_no, 
-                                               c.cand_course AS course, 
-                                               c.cand_team AS team
-                                        FROM talent t
+                                        SELECT 
+                                            CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
+                                            c.cand_course AS course, 
+                                            c.cand_team AS team, 
+                                            t.candidate_no, 
+                                            MAX(t.tal_mastery) AS tal_mastery, 
+                                            MAX(t.tal_performance) AS tal_performance, 
+                                            MAX(t.tal_impression) AS tal_impression, 
+                                            MAX(t.tal_audience) AS tal_audience, 
+                                            MAX(t.tal_total_score) AS tal_total_score
+                                        FROM male_talent t
                                         JOIN candidates c ON t.candidate_no = c.cand_no
-                                        WHERE t.jdg_id = ?
+                                        WHERE t.jdg_id = ? AND c.cand_gender = 'male'
+                                        GROUP BY t.candidate_no
+                                        ORDER BY t.candidate_no
                                     ");
                                     $stmt->bind_param("i", $jdg_id);
                                     $stmt->execute();
@@ -76,7 +79,75 @@
                                                   </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='9'>No candidates found for this judge</td></tr>";
+                                        echo "<tr><td colspan='9'>No male candidates found for this judge</td></tr>";
+                                    }
+
+                                    $stmt->close();
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Female Candidates Scores
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <th>Course</th>
+                                        <th>Team</th>
+                                        <th>Candidate No</th>
+                                        <th>Mastery</th>
+                                        <th>Performance</th>
+                                        <th>Impression</th>
+                                        <th>Audience</th>
+                                        <th>Total Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $stmt = $conn->prepare("
+                                        SELECT 
+                                            CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
+                                            c.cand_course AS course, 
+                                            c.cand_team AS team, 
+                                            t.candidate_no, 
+                                            MAX(t.tal_mastery) AS tal_mastery, 
+                                            MAX(t.tal_performance) AS tal_performance, 
+                                            MAX(t.tal_impression) AS tal_impression, 
+                                            MAX(t.tal_audience) AS tal_audience, 
+                                            MAX(t.tal_total_score) AS tal_total_score
+                                        FROM female_talent t
+                                        JOIN candidates c ON t.candidate_no = c.cand_no
+                                        WHERE t.jdg_id = ? AND c.cand_gender = 'female'
+                                        GROUP BY t.candidate_no
+                                        ORDER BY t.candidate_no
+                                    ");
+                                    $stmt->bind_param("i", $jdg_id);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+
+                                    if ($result && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                                    <td>{$row['fullname']}</td>
+                                                    <td>{$row['course']}</td>
+                                                    <td>{$row['team']}</td>
+                                                    <td>{$row['candidate_no']}</td>
+                                                    <td>{$row['tal_mastery']}</td>
+                                                    <td>{$row['tal_performance']}</td>
+                                                    <td>{$row['tal_impression']}</td>
+                                                    <td>{$row['tal_audience']}</td>
+                                                    <td>{$row['tal_total_score']}</td>
+                                                  </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='9'>No female candidates found for this judge</td></tr>";
                                     }
 
                                     $stmt->close();

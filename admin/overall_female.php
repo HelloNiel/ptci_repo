@@ -45,10 +45,10 @@
                                             SELECT c.cand_no AS candidate_no, 
                                                    CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname,
                                                    AVG(t.tal_total_score) AS overall_score 
-                                            FROM talent t
+                                            FROM female_talent t  -- Change to the female talent table
                                             JOIN candidates c ON c.cand_no = t.candidate_no
                                             WHERE c.cand_gender = 'Female'  -- Filter for female candidates
-                                            GROUP BY c.cand_no
+                                            GROUP BY c.cand_no, c.cand_fn, c.cand_ln
                                         ) AS ranked_scores
                                     ";
 
@@ -103,9 +103,9 @@
                                             COALESCE(SUM(CASE WHEN t.jdg_id = 35 THEN t.tal_total_score END), 0) AS score_judge2,
                                             COALESCE(SUM(CASE WHEN t.jdg_id = 36 THEN t.tal_total_score END), 0) AS score_judge3
                                         FROM candidates c
-                                        LEFT JOIN talent t ON c.cand_no = t.candidate_no
+                                        LEFT JOIN female_talent t ON c.cand_no = t.candidate_no -- Change to the female talent table
                                         WHERE c.cand_gender = 'Female'  -- Filter for female candidates
-                                        GROUP BY c.cand_no
+                                        GROUP BY c.cand_no, c.cand_fn, c.cand_ln, c.cand_course, c.cand_team
                                     ";
 
                                     $result = $conn->query($sql);

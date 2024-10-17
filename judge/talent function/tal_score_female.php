@@ -10,15 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $jdg_id = $_SESSION['jdg_id'];
-    $table_name = "tal_judge1_female";
 
-    if ($jdg_id == 35) {
-        $table_name = "tal_judge2_female";
-    } elseif ($jdg_id == 36) {
-        $table_name = "tal_judge3_female";
+    $stmt = $conn->prepare("INSERT INTO female_talent (tal_mastery, tal_performance, tal_impression, tal_audience, tal_total_score, fullname, course, team, candidate_no, cand_id, jdg_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
     }
-
-    $stmt = $conn->prepare("INSERT INTO $table_name (tal_mastery, tal_performance, tal_impression, tal_audience, tal_total_score, fullname, course, team, candidate_no, jdg_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'mastery_') === 0) {
@@ -29,23 +26,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $audience = (int)$_POST["audience_$cand_no"];
             $total_score = ($mastery + $performance + $impression + $audience) * 0.1;
 
-            $query = $conn->prepare("SELECT cand_fn, cand_ln, cand_course, cand_team FROM candidates WHERE cand_no = ?");
+            $query = $conn->prepare("SELECT cand_id, cand_fn, cand_ln, cand_course, cand_team FROM candidates WHERE cand_no = ?");
             $query->bind_param("s", $cand_no);
             $query->execute();
             $result = $query->get_result();
             $candidate = $result->fetch_assoc();
 
             if (!$candidate) {
-                echo "Candidate not found for candidate_no: $cand_no";
+                echo "Candidate not found for candidate_no: $cand_no<br>";
                 continue;
             }
 
             $fullname = $candidate['cand_fn'] . ' ' . $candidate['cand_ln'];
+            $cand_id = $candidate['cand_id'];
 
-            $stmt->bind_param("iiiiiisssi", $mastery, $performance, $impression, $audience, $total_score, $fullname, $candidate['cand_course'], $candidate['cand_team'], $cand_no, $jdg_id);
+            $stmt->bind_param("iiiiiissssi", $mastery, $performance, $impression, $audience, $total_score, $fullname, $candidate['cand_course'], $candidate['cand_team'], $cand_no, $cand_id, $jdg_id);
 
             if (!$stmt->execute()) {
-                echo "Error: " . $stmt->error;
+                echo "Error executing statement for candidate_no $cand_no: " . $stmt->error . "<br>";
             }
         }
     }
