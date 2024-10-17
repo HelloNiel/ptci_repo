@@ -1,12 +1,11 @@
 <?php
-session_start(); 
+session_start();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include 'includes/header.php'; ?>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -31,15 +30,14 @@ session_start();
                         unset($_SESSION['error_message']);
                     }
                     ?>
-                    <h1 class="mt-4">Candidates</h1>
+                    <h1 class="mt-4">Male Candidates</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Candidates/Uniform</li>
+                        <li class="breadcrumb-item active">Male Candidates/Uniform</li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-body">
                             <h3>Male Candidates</h3>
-                            <form action="./talent function/submit_scores.php" method="post">
-                                <input type="hidden" name="judge_id" value="<?php echo isset($_GET['judge_id']) ? intval($_GET['judge_id']) : 34; ?>"> 
+                            <form action="./talent function/submit_scores_male.php" method="post">
                                 <table class="table table-striped table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
@@ -55,6 +53,7 @@ session_start();
                                     <tbody>
                                         <?php
                                         include '../partial/connection.php';
+
                                         $sql = "SELECT `cand_no`, `cand_team`, `cand_ln`, `cand_fn`, `cand_gender`, `cand_course` FROM `candidates` WHERE `cand_gender` = 'Male'";
                                         $result = $conn->query($sql);
                                         if ($result->num_rows > 0) {

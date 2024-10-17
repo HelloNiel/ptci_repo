@@ -16,9 +16,8 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Uniform Score</h1>
+                    <h1 class="mt-4">Uniform Scores</h1>
 
-                    <!-- Male Candidates Table -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -41,15 +40,34 @@
                                 <tbody>
                                     <?php
                                     include '../partial/connection.php';
+
+                                    $judge_ids = [];
+                                    $judge_query = "SELECT jdg_id FROM judge ORDER BY jdg_id"; 
+                                    $judge_result = $conn->query($judge_query);
+
+                                    if ($judge_result && $judge_result->num_rows > 0) {
+                                        while ($row = $judge_result->fetch_assoc()) {
+                                            $judge_ids[] = $row['jdg_id'];
+                                        }
+                                    } else {
+                                        die("No judges found.");
+                                    }
+
+                                    if (count($judge_ids) < 5) {
+                                        die("Not enough judges available.");
+                                    }
+
+                                    list($judge_id_1, $judge_id_2, $judge_id_3, $judge_id_4, $judge_id_5) = $judge_ids;
+
                                     $query = "
                                         SELECT c.cand_no, 
                                         CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
                                         c.cand_team,
-                                        MAX(CASE WHEN us.judge_id = 34 THEN us.score END) AS judge_1_score,
-                                        MAX(CASE WHEN us.judge_id = 35 THEN us.score END) AS judge_2_score,
-                                        MAX(CASE WHEN us.judge_id = 36 THEN us.score END) AS judge_3_score,
-                                        MAX(CASE WHEN us.judge_id = 39 THEN us.score END) AS judge_4_score,
-                                        MAX(CASE WHEN us.judge_id = 40 THEN us.score END) AS judge_5_score
+                                        MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score
                                         FROM candidates c
                                         LEFT JOIN unif_score_male us ON c.cand_no = us.cand_no
                                         WHERE c.cand_gender = 'male'
@@ -104,11 +122,11 @@
                                         SELECT c.cand_no, 
                                         CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
                                         c.cand_team,
-                                        MAX(CASE WHEN us.judge_id = 34 THEN us.score END) AS judge_1_score,
-                                        MAX(CASE WHEN us.judge_id = 35 THEN us.score END) AS judge_2_score,
-                                        MAX(CASE WHEN us.judge_id = 36 THEN us.score END) AS judge_3_score,
-                                        MAX(CASE WHEN us.judge_id = 39 THEN us.score END) AS judge_4_score,
-                                        MAX(CASE WHEN us.judge_id = 40 THEN us.score END) AS judge_5_score
+                                        MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score
                                         FROM candidates c
                                         LEFT JOIN unif_score_female us ON c.cand_no = us.cand_no
                                         WHERE c.cand_gender = 'Female'

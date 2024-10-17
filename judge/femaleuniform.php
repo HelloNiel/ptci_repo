@@ -34,7 +34,6 @@
                         <div class="card-body">
                             <h3>Female Candidates</h3>
                             <form action="./talent function/submit_scores_female.php" method="post">
-                                <input type="hidden" name="judge_id" value="<?php echo isset($_SESSION['jdg_id']) ? intval($_SESSION['jdg_id']) : ''; ?>">
                                 <table class="table table-striped table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
