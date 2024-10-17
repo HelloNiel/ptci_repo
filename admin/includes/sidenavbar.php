@@ -10,7 +10,6 @@
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
             Talent Scoreboard
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-            
         </a>
         
         <div class="collapse" id="collapseScoreboard" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -18,10 +17,25 @@
                 <a class="nav-link" href="<?php echo "judge1.php"; ?>">Talent Judge 1</a>
                 <a class="nav-link" href="<?php echo "judge2.php"; ?>">Talent Judge 2</a>
                 <a class="nav-link" href="<?php echo "judge3.php"; ?>">Talent Judge 3</a>
-                <a class="nav-link" href="<?php echo "overall_male.php"; ?>">overall Score male</a>
-                <a class="nav-link" href="<?php echo "overall_female.php"; ?>">overall Score female</a>
+                <a class="nav-link" href="<?php echo "overall_score.php"; ?>">Overall Score</a>
             </nav>
         </div>
+
+        <div class="sb-sidenav-menu-heading">Categories Score</div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
+            <div class="sb-nav-link-icon"><i class="fas fa-check-circle"></i></div>
+            Categories Score
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseCategories" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link" href="<?php echo "unif_scores.php"; ?>">Uniform Score</a>
+                <a class="nav-link" href="<?php echo "swimwear_scores.php"; ?>">Swimwear Score</a>
+                <a class="nav-link" href="<?php echo "gown_barong_scores.php"; ?>">Gown/Barong Score</a>
+                <a class="nav-link" href="<?php echo "qa_scores.php"; ?>">Q & A Score</a>
+            </nav>
+        </div>
+
         <div class="sb-sidenav-menu-heading">Settings</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStudents" aria-expanded="false" aria-controls="collapseStudents">
             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
