@@ -33,7 +33,7 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <h3>Female Candidates</h3>
-                            <form action="./talent function/submit_scores_female.php" method="post">
+                            <form action="./function/unif_scores_female.php" method="post">
                                 <table class="table table-striped table-bordered" id="dataTable">
                                     <thead>
                                         <tr>

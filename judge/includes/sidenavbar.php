@@ -21,7 +21,7 @@
                                     <a class="nav-link" href="<?php echo "maletalent.php" ?>">Talent</a>
                                     <a class="nav-link" href="<?php echo "maleuniform.php" ?>">Uniform</a>
                                     <a class="nav-link" href="<?php echo "maleswimwear.php" ?>">Swimwear</a>
-                                    <a class="nav-link" href="<?php echo "maleformalwear.php" ?>">Formal Wear</a>
+                                    <a class="nav-link" href="<?php echo "male_barong.php" ?>">Barong</a>
                                     <a class="nav-link" href="<?php echo "maleqna.php" ?>">Question & Answer</a>
                                 </nav>
                             </div>
@@ -35,7 +35,7 @@
                                     <a class="nav-link" href="<?php echo "femaletalent.php" ?>">Talent</a>
                                     <a class="nav-link" href="<?php echo "femaleuniform.php" ?>">Uniform</a>
                                     <a class="nav-link" href="<?php echo "femaleswimwear.php" ?>">Swimwear</a>
-                                    <a class="nav-link" href="<?php echo "femaleformalwear.php" ?>">Formal Wear</a>
+                                    <a class="nav-link" href="<?php echo "female_gown.php" ?>">Gown</a>
                                     <a class="nav-link" href="<?php echo "femaleqna.php" ?>">Question & Answer</a>
                                 </nav>
                             </div>

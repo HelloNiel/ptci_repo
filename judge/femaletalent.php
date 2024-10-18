@@ -39,7 +39,7 @@ include '../partial/connection.php';
                     ?>
 
                     <div class="table-responsive">
-                        <form method="POST" action="./talent function/tal_score_female.php">
+                        <form method="POST" action="./function/tal_score_female.php">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>

@@ -37,7 +37,7 @@ session_start();
                     <div class="card mb-4">
                         <div class="card-body">
                             <h3>Male Candidates</h3>
-                            <form action="./talent function/submit_scores_male.php" method="post">
+                            <form action="./function/unif_scores_male.php" method="post">
                                 <table class="table table-striped table-bordered" id="dataTable">
                                     <thead>
                                         <tr>

@@ -30,14 +30,14 @@ session_start();
                         unset($_SESSION['error_message']);
                     }
                     ?>
-                    <h1 class="mt-4">Swim Wear Candidates (Male)</h1>
+                    <h1 class="mt-4">Gown Candidates (Female)</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Swim Wear Candidates (Male)</li>
+                        <li class="breadcrumb-item active">Gown Candidates (Female)</li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h3>Swim Wear Candidates (Male)</h3>
-                            <form action="./function/swimwear_score_male.php" method="post">
+                            <h3>Gown Candidates (Female)</h3>
+                            <form action="./function/gown_score_female.php" method="post"> <!-- Adjust the action accordingly -->
                                 <table class="table table-striped table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
@@ -54,7 +54,7 @@ session_start();
                                         <?php
                                         include '../partial/connection.php';
 
-                                        $sql = "SELECT `cand_no`, `cand_team`, `cand_ln`, `cand_fn`, `cand_gender`, `cand_course` FROM `candidates` WHERE `cand_gender` = 'Male'"; // Modify as needed
+                                        $sql = "SELECT `cand_no`, `cand_team`, `cand_ln`, `cand_fn`, `cand_gender`, `cand_course` FROM `candidates` WHERE `cand_gender` = 'Female'";
                                         $result = $conn->query($sql);
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {

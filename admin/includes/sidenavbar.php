@@ -32,7 +32,7 @@
                 <a class="nav-link" href="<?php echo "unif_scores.php"; ?>">Uniform Score</a>
                 <a class="nav-link" href="<?php echo "swimwear_scores.php"; ?>">Swimwear Score</a>
                 <a class="nav-link" href="<?php echo "gown_barong_scores.php"; ?>">Gown/Barong Score</a>
-                <a class="nav-link" href="<?php echo "qa_scores.php"; ?>">Q & A Score</a>
+                <a class="nav-link" href="<?php echo "qna_scores.php"; ?>">Q & A Score</a>
             </nav>
         </div>
 
