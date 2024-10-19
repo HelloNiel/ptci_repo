@@ -2,7 +2,6 @@
 session_start();
 include 'includes/header.php'; 
 
-// Check if the judge is logged in
 if (!isset($_SESSION['jdg_id'])) {
     die("You must be logged in as a judge to view this page.");
 }

@@ -33,8 +33,19 @@
                 <a class="nav-link" href="<?php echo "swimwear_scores.php"; ?>">Swimwear Score</a>
                 <a class="nav-link" href="<?php echo "gown_barong_scores.php"; ?>">Gown/Barong Score</a>
                 <a class="nav-link" href="<?php echo "qna_scores.php"; ?>">Q & A Score</a>
+                <a class="nav-link" href="<?php echo "cat_total_scores.php"; ?>">Total Score</a>
             </nav>
         </div>
+
+        <div class="sb-sidenav-menu-heading">Top Candidates</div>
+        <a class="nav-link" href="<?php echo "top5_qna.php"; ?>"> 
+            <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+            Top 5 Candidates
+        </a>
+        <a class="nav-link" href="<?php echo "top_finalists.php"; ?>"> 
+            <div class="sb-nav-link-icon"><i class="fas fa-trophy"></i></div>
+            Top 3 Finalists
+        </a>
 
         <div class="sb-sidenav-menu-heading">Settings</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStudents" aria-expanded="false" aria-controls="collapseStudents">

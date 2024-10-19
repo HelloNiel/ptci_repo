@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include '../../partial/connection.php';
 
@@ -8,12 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($judge_id !== null) {
         foreach ($_POST['score'] as $cand_no => $score) {
             if (!empty($score) && is_numeric($score) && $score >= 7 && $score <= 10) {
-                $stmt = $conn->prepare("INSERT INTO unif_score_female (cand_no, score, judge_id) VALUES (?, ?, ?)
+                $stmt = $conn->prepare("INSERT INTO unif_score_female (cand_no, score, judge_id) 
+                                        VALUES (?, ?, ?)
                                         ON DUPLICATE KEY UPDATE score = VALUES(score)");
                 if ($stmt) {
-                    $stmt->bind_param("sii", $cand_no, $score, $judge_id);
+                    $stmt->bind_param("iii", $cand_no, $score, $judge_id);
                     if (!$stmt->execute()) {
-                        $_SESSION['error_message'] = "Failed to submit score for candidate {$cand_no}.";
+                        $_SESSION['error_message'] = "Failed to submit score for candidate {$cand_no}. Error: " . $stmt->error;
                     }
                     $stmt->close();
                 } else {
@@ -23,6 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['error_message'] = "Invalid score for candidate {$cand_no}.";
             }
         }
+
+        $total_stmt = $conn->prepare("
+            INSERT INTO female_candidate_total_scores (cand_no, unif_total)
+            SELECT cand_no, AVG(score) -- Use AVG for the actual average calculation
+            FROM unif_score_female
+            GROUP BY cand_no
+            ON DUPLICATE KEY UPDATE unif_total = VALUES(unif_total); -- Update unif_total correctly
+        ");
+        
+        if ($total_stmt) {
+            $total_stmt->execute();
+            $total_stmt->close();
+        } else {
+            $_SESSION['error_message'] = "Failed to update total scores.";
+        }
+
         if (!isset($_SESSION['error_message'])) {
             $_SESSION['success_message'] = "Scores submitted successfully!";
         }
@@ -32,5 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
-header("Location: ../maleuniform.php");
+header("Location: ../femaleuniform.php");
 exit();
+?>

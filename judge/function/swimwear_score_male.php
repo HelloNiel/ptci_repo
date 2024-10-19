@@ -1,21 +1,18 @@
-<?php
+<?php 
 session_start();
 include '../../partial/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $judge_id = isset($_SESSION['jdg_id']) ? intval($_SESSION['jdg_id']) : null;
 
-    echo "Judge ID: $judge_id<br>";
-
     if ($judge_id !== null) {
         foreach ($_POST['score'] as $cand_no => $score) {
-            echo "Candidate No: $cand_no, Score: $score<br>";
-
             if (!empty($score) && is_numeric($score) && $score >= 7 && $score <= 10) {
-                $stmt = $conn->prepare("INSERT INTO swimwear_score_male (cand_no, judge_id, score) VALUES (?, ?, ?)
-                                         ON DUPLICATE KEY UPDATE score = VALUES(score)");
+                $stmt = $conn->prepare("INSERT INTO swimwear_score_male (cand_no, score, judge_id) 
+                                        VALUES (?, ?, ?)
+                                        ON DUPLICATE KEY UPDATE score = VALUES(score)");
                 if ($stmt) {
-                    $stmt->bind_param("sii", $cand_no, $judge_id, $score);
+                    $stmt->bind_param("iii", $cand_no, $score, $judge_id);
                     if (!$stmt->execute()) {
                         $_SESSION['error_message'] = "Failed to submit score for candidate {$cand_no}. Error: " . $stmt->error;
                     }
@@ -26,6 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $_SESSION['error_message'] = "Invalid score for candidate {$cand_no}.";
             }
+        }
+
+        $total_stmt = $conn->prepare("
+            INSERT INTO male_candidate_total_scores (cand_no, swim_total)
+            SELECT cand_no, AVG(score) 
+            FROM swimwear_score_male
+            GROUP BY cand_no
+            ON DUPLICATE KEY UPDATE swim_total = VALUES(swim_total);
+        ");
+        
+        if ($total_stmt) {
+            $total_stmt->execute();
+            $total_stmt->close();
+        } else {
+            $_SESSION['error_message'] = "Failed to update total scores.";
         }
 
         if (!isset($_SESSION['error_message'])) {

@@ -18,7 +18,6 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Q&A Scores</h1>
                     
-                    <!-- Male Candidates Scores -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -98,7 +97,6 @@
                         </div>
                     </div>
 
-                    <!-- Female Candidates Scores -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
