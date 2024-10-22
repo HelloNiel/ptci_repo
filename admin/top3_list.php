@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +21,12 @@
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Top 3 Candidates</h1>
-                    
+                    <?php
+                    if (isset($_SESSION['success'])) {
+                        echo '<div class="alert alert-success" role="alert">' . $_SESSION['success'] . '</div>';
+                        unset($_SESSION['success']);
+                    }
+                    ?>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -175,14 +184,14 @@
                                         $result_female = $conn->query($query_female);
                                         if ($result_female && $result_female->num_rows > 0) {
                                             while ($row = $result_female->fetch_assoc()) {
-                                                $scores = [
+                                                $scores_female = [
                                                     $row['judge_1_score'] !== null ? $row['judge_1_score'] : 0,
                                                     $row['judge_2_score'] !== null ? $row['judge_2_score'] : 0,
                                                     $row['judge_3_score'] !== null ? $row['judge_3_score'] : 0,
                                                     $row['judge_4_score'] !== null ? $row['judge_4_score'] : 0,
                                                     $row['judge_5_score'] !== null ? $row['judge_5_score'] : 0,
                                                 ];
-                                                $totalScore = array_sum($scores) / (count($scores) * 10) * 100;
+                                                $totalScoreFemale = array_sum($scores_female) / (count($scores_female) * 10) * 100;
 
                                                 echo "<tr>
                                                         <td>{$row['rank']}</td>
@@ -194,9 +203,9 @@
                                                         <td>" . ($row['judge_3_score'] !== null ? $row['judge_3_score'] : 'N/A') . "</td>
                                                         <td>" . ($row['judge_4_score'] !== null ? $row['judge_4_score'] : 'N/A') . "</td>
                                                         <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
-                                                        <td>" . number_format($totalScore, 2) . "%</td>
+                                                        <td>" . number_format($totalScoreFemale, 2) . "%</td>
                                                       </tr>";
-                                              
+
                                                 echo '<input type="hidden" name="cand_no[]" value="' . $row['cand_no'] . '">
                                                       <input type="hidden" name="cand_fn[]" value="' . $row['full_name'] . '">
                                                       <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">';

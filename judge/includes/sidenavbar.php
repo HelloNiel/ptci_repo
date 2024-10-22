@@ -55,16 +55,17 @@
         </div>
 
         <div class="sb-sidenav-menu-heading">Top 3 Candidates</div>
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTop5" aria-expanded="false" aria-controls="collapseTop5">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTop3" aria-expanded="false" aria-controls="collapseTop3">
             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
             Top 3 Candidates
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
-        <div class="collapse" id="collapseTop5" aria-labelledby="headingTop5" data-bs-parent="#sidenavAccordion">
+        <div class="collapse" id="collapseTop3" aria-labelledby="headingTop3" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
                 <a class="nav-link" href="<?php echo 'top3_male.php'; ?>">Top 3 Male</a>
                 <a class="nav-link" href="<?php echo 'top3_female.php'; ?>">Top 3 Female</a>
             </nav>
         </div>
+
     </div>
 </div>

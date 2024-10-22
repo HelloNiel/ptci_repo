@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../partial/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->close();
+    
+    $_SESSION['success'] = "Top 3 male candidates saved successfully.";
     header("Location: ../top3_list.php");
     exit;
 } else {
