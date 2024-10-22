@@ -36,8 +36,6 @@
                                 <tbody>
                                     <?php
                                     include '../partial/connection.php';
-
-                                    // Query for overall scores of female candidates
                                     $sql = "
                                         SELECT candidate_no, fullname, overall_score, 
                                                RANK() OVER (ORDER BY overall_score DESC) AS rank
@@ -47,7 +45,7 @@
                                                    AVG(t.tal_total_score) AS overall_score 
                                             FROM female_talent t  -- Change to the female talent table
                                             JOIN candidates c ON c.cand_no = t.candidate_no
-                                            WHERE c.cand_gender = 'Female'  -- Filter for female candidates
+                                            WHERE c.cand_gender = 'Female'
                                             GROUP BY c.cand_no, c.cand_fn, c.cand_ln
                                         ) AS ranked_scores
                                     ";
@@ -92,7 +90,6 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    // Query to fetch scores from each judge for female candidates
                                     $sql = "
                                         SELECT 
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
@@ -103,8 +100,8 @@
                                             COALESCE(SUM(CASE WHEN t.jdg_id = 35 THEN t.tal_total_score END), 0) AS score_judge2,
                                             COALESCE(SUM(CASE WHEN t.jdg_id = 36 THEN t.tal_total_score END), 0) AS score_judge3
                                         FROM candidates c
-                                        LEFT JOIN female_talent t ON c.cand_no = t.candidate_no -- Change to the female talent table
-                                        WHERE c.cand_gender = 'Female'  -- Filter for female candidates
+                                        LEFT JOIN female_talent t ON c.cand_no = t.candidate_no
+                                        WHERE c.cand_gender = 'Female'
                                         GROUP BY c.cand_no, c.cand_fn, c.cand_ln, c.cand_course, c.cand_team
                                     ";
 

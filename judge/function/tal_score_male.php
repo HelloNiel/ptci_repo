@@ -28,11 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'mastery_') === 0) {
             $cand_no = str_replace('mastery_', '', $key);
-            $mastery = (int)$value;
-            $performance = (int)$_POST["performance_$cand_no"];
-            $impression = (int)$_POST["impression_$cand_no"];
-            $audience = (int)$_POST["audience_$cand_no"];
-            $total_score = ($mastery + $performance + $impression + $audience) * 0.1;
+            $mastery = (float)$value;
+            $performance = (float)$_POST["performance_$cand_no"];
+            $impression = (float)$_POST["impression_$cand_no"];
+            $audience = (float)$_POST["audience_$cand_no"];
+
+            $total_score = $mastery + $performance + $impression + $audience;
+
+            $total_score = round($total_score * 0.10, 2);
 
             $query = $conn->prepare("SELECT cand_id, cand_fn, cand_ln, cand_course, cand_team FROM candidates WHERE cand_no = ?");
             $query->bind_param("s", $cand_no);
@@ -49,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $fullname = $candidate['cand_fn'] . ' ' . $candidate['cand_ln'];
             $cand_id = $candidate['cand_id'];
 
-            $stmt->bind_param("iiiiiissssi", $mastery, $performance, $impression, $audience, $total_score, $fullname, $candidate['cand_course'], $candidate['cand_team'], $cand_no, $cand_id, $jdg_id);
+            $stmt->bind_param("ddddddssssi", $mastery, $performance, $impression, $audience, $total_score, $fullname, $candidate['cand_course'], $candidate['cand_team'], $cand_no, $cand_id, $jdg_id);
 
             if (!$stmt->execute()) {
                 $_SESSION['error_message'] = "Error executing statement for candidate_no $cand_no: " . $stmt->error;

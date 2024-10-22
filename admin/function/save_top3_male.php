@@ -1,25 +1,25 @@
 <?php
-session_start();    
 include '../../partial/connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $cand_no = $_POST['cand_no'];
-    $cand_fn = $_POST['cand_fn'];
-    $cand_ln = $_POST['cand_ln'];
-    $cand_team = $_POST['cand_team'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $candidateNumbers = $_POST['cand_no'];
+    $candidateFirstNames = $_POST['cand_fn'];
+    $candidateTeams = $_POST['cand_team'];
 
-    $conn->query("DELETE FROM top3_candidate_male");
+    $stmt = $conn->prepare("INSERT INTO top3_candidate_male (cand_no, cand_fn, cand_team) VALUES (?, ?, ?)");
 
-    $stmt = $conn->prepare("INSERT INTO top3_candidate_male (cand_no, cand_fn, cand_ln, cand_team) VALUES (?, ?, ?, ?)");
-    
-    for ($i = 0; $i < count($cand_no); $i++) {
-        $stmt->bind_param("isss", $cand_no[$i], $cand_fn[$i], $cand_ln[$i], $cand_team[$i]);
+    foreach ($candidateNumbers as $index => $candNo) {
+        $candFn = $candidateFirstNames[$index];
+        $candTeam = $candidateTeams[$index];
+        
+        $stmt->bind_param("sss", $candNo, $candFn, $candTeam);
         $stmt->execute();
     }
 
     $stmt->close();
-    $_SESSION['success_message'] = "Top 5 Male Candidates saved successfully!";
     header("Location: ../top3_list.php");
     exit;
+} else {
+    echo "Required data not received.";
 }
 ?>

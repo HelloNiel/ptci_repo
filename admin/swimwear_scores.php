@@ -16,12 +16,11 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Q&A Scores</h1>
-                    
+                    <h1 class="mt-4">Uniform Scores</h1>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Top 5 Male Candidates Scores
+                            Male Candidates Scores
                         </div>
                         <div class="card-body">
                             <table class="table table-striped table-bordered">
@@ -41,34 +40,51 @@
                                     <?php
                                     include '../partial/connection.php';
 
-                                    $query_top5_male = "
-                                        SELECT cand_no, 
-                                               cand_fn, 
-                                               cand_ln, 
-                                               cand_team,
-                                               MAX(CASE WHEN judge_id = 1 THEN score END) AS judge_1_score,
-                                               MAX(CASE WHEN judge_id = 2 THEN score END) AS judge_2_score,
-                                               MAX(CASE WHEN judge_id = 3 THEN score END) AS judge_3_score,
-                                               MAX(CASE WHEN judge_id = 4 THEN score END) AS judge_4_score,
-                                               MAX(CASE WHEN judge_id = 5 THEN score END) AS judge_5_score
-                                        FROM top5_scores_male
-                                        GROUP BY cand_no
-                                        ORDER BY MAX(score) DESC
-                                        LIMIT 5
+                                    $judge_ids = [];
+                                    $judge_query = "SELECT jdg_id FROM judge ORDER BY jdg_id"; 
+                                    $judge_result = $conn->query($judge_query);
+
+                                    if ($judge_result && $judge_result->num_rows > 0) {
+                                        while ($row = $judge_result->fetch_assoc()) {
+                                            $judge_ids[] = $row['jdg_id'];
+                                        }
+                                    } else {
+                                        die("No judges found.");
+                                    }
+
+                                    if (count($judge_ids) < 5) {
+                                        die("Not enough judges available.");
+                                    }
+
+                                    list($judge_id_1, $judge_id_2, $judge_id_3, $judge_id_4, $judge_id_5) = $judge_ids;
+
+                                    $query = "
+                                        SELECT c.cand_no, 
+                                        CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
+                                        c.cand_team,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score
+                                        FROM candidates c
+                                        LEFT JOIN swimwear_score_male us ON c.cand_no = us.cand_no
+                                        WHERE c.cand_gender = 'male'
+                                        GROUP BY c.cand_no
                                     ";
 
-                                    $result_top5_male = $conn->query($query_top5_male);
-                                    if ($result_top5_male && $result_top5_male->num_rows > 0) {
-                                        while ($row_top5 = $result_top5_male->fetch_assoc()) {
+                                    $result = $conn->query($query);
+                                    if ($result && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
-                                                    <td>{$row_top5['cand_no']}</td>
-                                                    <td>{$row_top5['cand_fn']} {$row_top5['cand_ln']}</td>
-                                                    <td>{$row_top5['cand_team']}</td>
-                                                    <td>" . ($row_top5['judge_1_score'] !== null ? $row_top5['judge_1_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5['judge_2_score'] !== null ? $row_top5['judge_2_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5['judge_3_score'] !== null ? $row_top5['judge_3_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5['judge_4_score'] !== null ? $row_top5['judge_4_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5['judge_5_score'] !== null ? $row_top5['judge_5_score'] : 'N/A') . "</td>
+                                                    <td>{$row['cand_no']}</td>
+                                                    <td>{$row['full_name']}</td>
+                                                    <td>{$row['cand_team']}</td>
+                                                    <td>" . ($row['judge_1_score'] !== null ? $row['judge_1_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row['judge_2_score'] !== null ? $row['judge_2_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row['judge_3_score'] !== null ? $row['judge_3_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row['judge_4_score'] !== null ? $row['judge_4_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
                                                   </tr>";
                                         }
                                     } else {
@@ -83,7 +99,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Top 5 Female Candidates Scores
+                            Female Candidates Scores
                         </div>
                         <div class="card-body">
                             <table class="table table-striped table-bordered">
@@ -101,34 +117,33 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $query_top5_female = "
-                                        SELECT cand_no, 
-                                               cand_fn, 
-                                               cand_ln, 
-                                               cand_team,
-                                               MAX(CASE WHEN judge_id = 1 THEN score END) AS judge_1_score,
-                                               MAX(CASE WHEN judge_id = 2 THEN score END) AS judge_2_score,
-                                               MAX(CASE WHEN judge_id = 3 THEN score END) AS judge_3_score,
-                                               MAX(CASE WHEN judge_id = 4 THEN score END) AS judge_4_score,
-                                               MAX(CASE WHEN judge_id = 5 THEN score END) AS judge_5_score
-                                        FROM top5_scores_female
-                                        GROUP BY cand_no
-                                        ORDER BY MAX(score) DESC
-                                        LIMIT 5
+                                    $query_female = "
+                                        SELECT c.cand_no, 
+                                        CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
+                                        c.cand_team,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                        MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score
+                                        FROM candidates c
+                                        LEFT JOIN swimwear_score_female us ON c.cand_no = us.cand_no
+                                        WHERE c.cand_gender = 'Female'
+                                        GROUP BY c.cand_no
                                     ";
 
-                                    $result_top5_female = $conn->query($query_top5_female);
-                                    if ($result_top5_female && $result_top5_female->num_rows > 0) {
-                                        while ($row_top5_female = $result_top5_female->fetch_assoc()) {
+                                    $result_female = $conn->query($query_female);
+                                    if ($result_female && $result_female->num_rows > 0) {
+                                        while ($row_female = $result_female->fetch_assoc()) {
                                             echo "<tr>
-                                                    <td>{$row_top5_female['cand_no']}</td>
-                                                    <td>{$row_top5_female['cand_fn']} {$row_top5_female['cand_ln']}</td>
-                                                    <td>{$row_top5_female['cand_team']}</td>
-                                                    <td>" . ($row_top5_female['judge_1_score'] !== null ? $row_top5_female['judge_1_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5_female['judge_2_score'] !== null ? $row_top5_female['judge_2_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5_female['judge_3_score'] !== null ? $row_top5_female['judge_3_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5_female['judge_4_score'] !== null ? $row_top5_female['judge_4_score'] : 'N/A') . "</td>
-                                                    <td>" . ($row_top5_female['judge_5_score'] !== null ? $row_top5_female['judge_5_score'] : 'N/A') . "</td>
+                                                    <td>{$row_female['cand_no']}</td>
+                                                    <td>{$row_female['full_name']}</td>
+                                                    <td>{$row_female['cand_team']}</td>
+                                                    <td>" . ($row_female['judge_1_score'] !== null ? $row_female['judge_1_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row_female['judge_2_score'] !== null ? $row_female['judge_2_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row_female['judge_3_score'] !== null ? $row_female['judge_3_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row_female['judge_4_score'] !== null ? $row_female['judge_4_score'] : 'N/A') . "</td>
+                                                    <td>" . ($row_female['judge_5_score'] !== null ? $row_female['judge_5_score'] : 'N/A') . "</td>
                                                   </tr>";
                                         }
                                     } else {

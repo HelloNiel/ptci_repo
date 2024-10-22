@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php 
-    session_start();
-    include 'includes/header.php'; 
-    ?>
+    <?php include 'includes/header.php'; ?>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -19,165 +16,204 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Total Score</h1>
+                    <h1 class="mt-4">Top 3 Candidates</h1>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Male Candidates Scores
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="./function/save_top3_male.php">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Candidate No</th>
+                                            <th>Full Name</th>
+                                            <th>Team</th>
+                                            <th>Judge 1 Score</th>
+                                            <th>Judge 2 Score</th>
+                                            <th>Judge 3 Score</th>
+                                            <th>Judge 4 Score</th>
+                                            <th>Judge 5 Score</th>
+                                            <th>Total Score (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        include '../partial/connection.php';
 
-                    <?php
-                    include '../partial/connection.php';
+                                        $judge_ids = [];
+                                        $judge_query = "SELECT jdg_id FROM judge ORDER BY jdg_id"; 
+                                        $judge_result = $conn->query($judge_query);
 
+                                        if ($judge_result && $judge_result->num_rows > 0) {
+                                            while ($row = $judge_result->fetch_assoc()) {
+                                                $judge_ids[] = $row['jdg_id'];
+                                            }
+                                        } else {
+                                            die("No judges found.");
+                                        }
 
-                    if (isset($_SESSION['success_message'])) {
-                        echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
-                        unset($_SESSION['success_message']);
-                    }
+                                        if (count($judge_ids) < 5) {
+                                            die("Not enough judges available.");
+                                        }
 
-                    // Male
-                    $query_male_scores = "
-                        SELECT c.cand_no, 
-                               c.cand_fn, 
-                               c.cand_ln, 
-                               c.cand_team,
-                               m.unif_total, 
-                               m.swim_total, 
-                               m.barong_total, 
-                               m.qna_total,
-                               m.talent_total,
-                               (m.talent_total * 0.10 + 
-                               m.unif_total * 0.20 + 
-                               m.swim_total * 0.20 + 
-                               m.barong_total * 0.20 + 
-                               m.qna_total * 0.30) AS total_score,
-                               ((m.talent_total * 0.10 + 
-                               m.unif_total * 0.20 + 
-                               m.swim_total * 0.20 + 
-                               m.barong_total * 0.20 + 
-                               m.qna_total * 0.30) / 10) * 100 AS percentage_score
-                        FROM male_candidate_total_scores m
-                        JOIN candidates c ON m.cand_no = c.cand_no
-                        WHERE c.cand_gender = 'Male'
-                        ORDER BY percentage_score DESC
-                        LIMIT 3";
+                                        list($judge_id_1, $judge_id_2, $judge_id_3, $judge_id_4, $judge_id_5) = $judge_ids;
 
-                    $result_male_scores = $conn->query($query_male_scores);
-                    if (!$result_male_scores) {
-                        die("Query failed: " . $conn->error);
-                    }
-                    ?>
+                                        $query = "
+                                            SELECT 
+                                                c.cand_no, 
+                                                CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
+                                                c.cand_team,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score,
+                                                (IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END), 0)) / 5 AS total_score,
+                                                ROW_NUMBER() OVER (ORDER BY total_score DESC) AS rank
+                                            FROM top5_candidate_male c
+                                            LEFT JOIN top5_scores_male us ON c.cand_no = us.cand_no
+                                            GROUP BY c.cand_no
+                                            ORDER BY total_score DESC
+                                            LIMIT 3
+                                        ";
 
-                    <h2>Top 5 Male Candidates Total Scores</h2>
-                    <form action="./function/save_top3_male.php" method="POST">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Candidate No</th>
-                                    <th>Full Name</th>
-                                    <th>Team</th>
-                                    <th>Talent Score</th>
-                                    <th>Uniform Score</th>
-                                    <th>Swimwear Score</th>
-                                    <th>Barong Score</th>
-                                    <th>Q&A Score</th>
-                                    <th>Percentage Total Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $result_male_scores->fetch_assoc()) { ?>
-                                    <tr>
-                                        <td><?php echo $row['cand_no']; ?></td>
-                                        <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
-                                        <td><?php echo $row['cand_team']; ?></td>
-                                        <td><?php echo number_format($row['talent_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['unif_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['swim_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['barong_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['qna_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['percentage_score'], 2); ?>%</td>
-                                        <input type="hidden" name="cand_no[]" value="<?php echo $row['cand_no']; ?>">
-                                        <input type="hidden" name="cand_fn[]" value="<?php echo $row['cand_fn']; ?>">
-                                        <input type="hidden" name="cand_ln[]" value="<?php echo $row['cand_ln']; ?>">
-                                        <input type="hidden" name="cand_team[]" value="<?php echo $row['cand_team']; ?>">
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <button type="submit" class="btn btn-primary">Save Top 3 Male Candidates</button>
-                    </form>
+                                        $result = $conn->query($query);
+                                        if ($result && $result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $scores = [
+                                                    $row['judge_1_score'] !== null ? $row['judge_1_score'] : 0,
+                                                    $row['judge_2_score'] !== null ? $row['judge_2_score'] : 0,
+                                                    $row['judge_3_score'] !== null ? $row['judge_3_score'] : 0,
+                                                    $row['judge_4_score'] !== null ? $row['judge_4_score'] : 0,
+                                                    $row['judge_5_score'] !== null ? $row['judge_5_score'] : 0,
+                                                ];
+                                                $totalScore = array_sum($scores) / (count($scores) * 10) * 100;
 
-                    <?php
-                    // Female
-                    $query_female_scores = "
-                        SELECT c.cand_no, 
-                               c.cand_fn, 
-                               c.cand_ln, 
-                               c.cand_team,
-                               f.unif_total, 
-                               f.swim_total, 
-                               f.gown_total, 
-                               f.qna_total,
-                               f.talent_total,
-                               (f.talent_total * 0.10 + 
-                               f.unif_total * 0.20 + 
-                               f.swim_total * 0.20 + 
-                               f.gown_total * 0.20 + 
-                               f.qna_total * 0.30) AS total_score,
-                               ((f.talent_total * 0.10 + 
-                               f.unif_total * 0.20 + 
-                               f.swim_total * 0.20 + 
-                               f.gown_total * 0.20 + 
-                               f.qna_total * 0.30) / 10) * 100 AS percentage_score
-                        FROM female_candidate_total_scores f
-                        JOIN candidates c ON f.cand_no = c.cand_no
-                        WHERE c.cand_gender = 'Female'
-                        ORDER BY percentage_score DESC
-                        LIMIT 3";
+                                                echo "<tr>
+                                                        <td>{$row['rank']}</td>
+                                                        <td>{$row['cand_no']}</td>
+                                                        <td>{$row['full_name']}</td>
+                                                        <td>{$row['cand_team']}</td>
+                                                        <td>" . ($row['judge_1_score'] !== null ? $row['judge_1_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_2_score'] !== null ? $row['judge_2_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_3_score'] !== null ? $row['judge_3_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_4_score'] !== null ? $row['judge_4_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
+                                                        <td>" . number_format($totalScore, 2) . "%</td>
+                                                      </tr>";
+                                              
+                                                echo '<input type="hidden" name="cand_no[]" value="' . $row['cand_no'] . '">
+                                                      <input type="hidden" name="cand_fn[]" value="' . $row['full_name'] . '">
+                                                      <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">';
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='10'>No scores available.</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="btn btn-primary">Save Top 3 Male Candidates</button>
+                            </form>
+                        </div>
+                    </div>
 
-                    $result_female_scores = $conn->query($query_female_scores);
-                    if (!$result_female_scores) {
-                        die("Query failed: " . $conn->error);
-                    }
-                    ?>
-                    <h2>Top 3 Female Candidates Total Scores</h2>
-                    <form action="./function/save_top3_female.php" method="POST">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Candidate No</th>
-                                    <th>Full Name</th>
-                                    <th>Team</th>
-                                    <th>Talent Score</th>
-                                    <th>Uniform Score</th>
-                                    <th>Swimwear Score</th>
-                                    <th>Gown Score</th>
-                                    <th>Q&A Score</th>
-                                    <th>Percentage Total Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $result_female_scores->fetch_assoc()) { ?>
-                                    <tr>
-                                        <td><?php echo $row['cand_no']; ?></td>
-                                        <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
-                                        <td><?php echo $row['cand_team']; ?></td>
-                                        <td><?php echo number_format($row['talent_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['unif_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['swim_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['gown_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['qna_total'], 2); ?></td>
-                                        <td><?php echo number_format($row['percentage_score'], 2); ?>%</td>
-                                        <input type="hidden" name="cand_no[]" value="<?php echo $row['cand_no']; ?>">
-                                        <input type="hidden" name="cand_fn[]" value="<?php echo $row['cand_fn']; ?>">
-                                        <input type="hidden" name="cand_ln[]" value="<?php echo $row['cand_ln']; ?>">
-                                        <input type="hidden" name="cand_team[]" value="<?php echo $row['cand_team']; ?>">
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <button type="submit" class="btn btn-primary">Save Top 3 Female Candidates</button>
-                    </form>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Female Candidates Scores
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="./function/save_top3_female.php">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Candidate No</th>
+                                            <th>Full Name</th>
+                                            <th>Team</th>
+                                            <th>Judge 1 Score</th>
+                                            <th>Judge 2 Score</th>
+                                            <th>Judge 3 Score</th>
+                                            <th>Judge 4 Score</th>
+                                            <th>Judge 5 Score</th>
+                                            <th>Total Score (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $query_female = "
+                                            SELECT 
+                                                c.cand_no, 
+                                                CONCAT(c.cand_fn, ' ', c.cand_ln) AS full_name, 
+                                                c.cand_team,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END) AS judge_1_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END) AS judge_2_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END) AS judge_3_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END) AS judge_4_score,
+                                                MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END) AS judge_5_score,
+                                                (IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_1 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_2 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_3 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_4 THEN us.score END), 0) +
+                                                IFNULL(MAX(CASE WHEN us.judge_id = $judge_id_5 THEN us.score END), 0)) / 5 AS total_score,
+                                                ROW_NUMBER() OVER (ORDER BY total_score DESC) AS rank
+                                            FROM top5_candidate_female c
+                                            LEFT JOIN top5_scores_female us ON c.cand_no = us.cand_no
+                                            GROUP BY c.cand_no
+                                            ORDER BY total_score DESC
+                                            LIMIT 3
+                                        ";
 
+                                        $result_female = $conn->query($query_female);
+                                        if ($result_female && $result_female->num_rows > 0) {
+                                            while ($row = $result_female->fetch_assoc()) {
+                                                $scores = [
+                                                    $row['judge_1_score'] !== null ? $row['judge_1_score'] : 0,
+                                                    $row['judge_2_score'] !== null ? $row['judge_2_score'] : 0,
+                                                    $row['judge_3_score'] !== null ? $row['judge_3_score'] : 0,
+                                                    $row['judge_4_score'] !== null ? $row['judge_4_score'] : 0,
+                                                    $row['judge_5_score'] !== null ? $row['judge_5_score'] : 0,
+                                                ];
+                                                $totalScore = array_sum($scores) / (count($scores) * 10) * 100;
+
+                                                echo "<tr>
+                                                        <td>{$row['rank']}</td>
+                                                        <td>{$row['cand_no']}</td>
+                                                        <td>{$row['full_name']}</td>
+                                                        <td>{$row['cand_team']}</td>
+                                                        <td>" . ($row['judge_1_score'] !== null ? $row['judge_1_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_2_score'] !== null ? $row['judge_2_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_3_score'] !== null ? $row['judge_3_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_4_score'] !== null ? $row['judge_4_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
+                                                        <td>" . number_format($totalScore, 2) . "%</td>
+                                                      </tr>";
+                                              
+                                                echo '<input type="hidden" name="cand_no[]" value="' . $row['cand_no'] . '">
+                                                      <input type="hidden" name="cand_fn[]" value="' . $row['full_name'] . '">
+                                                      <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">';
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='10'>No scores available.</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="btn btn-primary">Save Top 3 Female Candidates</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
-    <?php include 'includes/script.php'; ?>
 </body>
 </html>

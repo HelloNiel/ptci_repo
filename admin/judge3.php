@@ -16,13 +16,20 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Judge 3</h1>
-
                     <?php
                     include '../partial/connection.php';
 
-                    $jdg_id = 43; 
+                    $jdg_id = 48;
+                    $judge_stmt = $conn->prepare("SELECT jdg_name FROM judge WHERE jdg_id = ?");
+                    $judge_stmt->bind_param("i", $jdg_id);
+                    $judge_stmt->execute();
+                    $judge_stmt->bind_result($jdg_name);
+                    $judge_stmt->fetch();
+                    $judge_stmt->close();
+                    ?>
+                    <h1 class="mt-4">Judge <?php echo htmlspecialchars($jdg_name); ?></h1>
 
+                    <?php
                     function displayCandidatesScores($gender, $jdg_id) {
                         global $conn;
                         $table_name = $gender === 'Female' ? 'female_talent' : 'male_talent';
@@ -37,7 +44,7 @@
                                    c.cand_course AS course, 
                                    c.cand_team AS team
                             FROM $table_name t
-                            JOIN candidates c ON t.candidate_no = c.cand_no
+                            JOIN candidates c ON t.cand_id = c.cand_id
                             WHERE t.jdg_id = ? AND c.cand_gender = ?
                         ");
                         $stmt->bind_param("is", $jdg_id, $gender);
@@ -47,10 +54,10 @@
                         if ($result && $result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>
+                                        <td>{$row['candidate_no']}</td>
                                         <td>{$row['fullname']}</td>
                                         <td>{$row['course']}</td>
                                         <td>{$row['team']}</td>
-                                        <td>{$row['candidate_no']}</td>
                                         <td>{$row['tal_mastery']}</td>
                                         <td>{$row['tal_performance']}</td>
                                         <td>{$row['tal_impression']}</td>
@@ -69,10 +76,10 @@
                     echo '<div class="card-header"><i class="fas fa-table me-1"></i> Male Candidates Scores</div>';
                     echo '<div class="card-body">';
                     echo '<table class="table table-bordered"><thead><tr>
+                            <th>Candidate No</th>
                             <th>Full Name</th>
                             <th>Course</th>
                             <th>Team</th>
-                            <th>Candidate No</th>
                             <th>Mastery</th>
                             <th>Performance</th>
                             <th>Impression</th>
@@ -86,10 +93,10 @@
                     echo '<div class="card-header"><i class="fas fa-table me-1"></i> Female Candidates Scores</div>';
                     echo '<div class="card-body">';
                     echo '<table class="table table-bordered"><thead><tr>
+                            <th>Candidate No</th>
                             <th>Full Name</th>
                             <th>Course</th>
                             <th>Team</th>
-                            <th>Candidate No</th>
                             <th>Mastery</th>
                             <th>Performance</th>
                             <th>Impression</th>

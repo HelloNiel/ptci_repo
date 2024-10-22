@@ -27,26 +27,30 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Team</th>
-                                        <th>Candidate No</th>
                                         <th>Score (Judge 1)</th>
                                         <th>Score (Judge 2)</th>
                                         <th>Score (Judge 3)</th>
+                                        <th>Total Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     include '../partial/connection.php';
-                                    
+
                                     $sql_male = "
                                         SELECT 
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
                                             c.cand_team AS team, 
                                             c.cand_no AS candidate_no,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 34 THEN t.tal_total_score END), 0) AS score_judge1,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 35 THEN t.tal_total_score END), 0) AS score_judge2,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 36 THEN t.tal_total_score END), 0) AS score_judge3
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 46 THEN t.tal_total_score END), 0) AS score_judge1,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 47 THEN t.tal_total_score END), 0) AS score_judge2,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 48 THEN t.tal_total_score END), 0) AS score_judge3,
+                                            (COALESCE(SUM(CASE WHEN t.jdg_id = 46 THEN t.tal_total_score END), 0) +
+                                             COALESCE(SUM(CASE WHEN t.jdg_id = 47 THEN t.tal_total_score END), 0) +
+                                             COALESCE(SUM(CASE WHEN t.jdg_id = 48 THEN t.tal_total_score END), 0)) / 3 AS total_score
                                         FROM candidates c
                                         LEFT JOIN male_talent t ON c.cand_no = t.candidate_no
                                         WHERE c.cand_gender = 'Male'  
@@ -58,16 +62,27 @@
                                     if ($result_male && $result_male->num_rows > 0) {
                                         while ($row = $result_male->fetch_assoc()) {
                                             echo "<tr>
+                                                    <td>{$row['candidate_no']}</td>
                                                     <td>{$row['fullname']}</td>
                                                     <td>{$row['team']}</td>
-                                                    <td>{$row['candidate_no']}</td>
                                                     <td>" . number_format($row['score_judge1'], 2) . "</td>
                                                     <td>" . number_format($row['score_judge2'], 2) . "</td>
                                                     <td>" . number_format($row['score_judge3'], 2) . "</td>
+                                                    <td>" . number_format($row['total_score'], 2) . "</td>
                                                   </tr>";
+
+                                            $total_score = $row['total_score'];
+                                            $candidate_no = $row['candidate_no'];
+                                            
+                                            $insert_sql = "
+                                                INSERT INTO male_candidate_total_scores (cand_no, talent_total) 
+                                                VALUES ('$candidate_no', '$total_score')
+                                                ON DUPLICATE KEY UPDATE talent_total = '$total_score';
+                                            ";
+                                            $conn->query($insert_sql);
                                         }
                                     } else {
-                                        echo "<tr><td colspan='6'>No data available</td></tr>";
+                                        echo "<tr><td colspan='7'>No data available</td></tr>";
                                     }
                                     ?>
                                 </tbody>
@@ -86,12 +101,13 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Team</th>
-                                        <th>Candidate No</th>
                                         <th>Score (Judge 1)</th>
                                         <th>Score (Judge 2)</th>
                                         <th>Score (Judge 3)</th>
+                                        <th>Total Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -101,9 +117,12 @@
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
                                             c.cand_team AS team, 
                                             c.cand_no AS candidate_no,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 34 THEN t.tal_total_score END), 0) AS score_judge1,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 35 THEN t.tal_total_score END), 0) AS score_judge2,
-                                            COALESCE(SUM(CASE WHEN t.jdg_id = 36 THEN t.tal_total_score END), 0) AS score_judge3
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 46 THEN t.tal_total_score END), 0) AS score_judge1,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 47 THEN t.tal_total_score END), 0) AS score_judge2,
+                                            COALESCE(SUM(CASE WHEN t.jdg_id = 48 THEN t.tal_total_score END), 0) AS score_judge3,
+                                            (COALESCE(SUM(CASE WHEN t.jdg_id = 46 THEN t.tal_total_score END), 0) +
+                                             COALESCE(SUM(CASE WHEN t.jdg_id = 47 THEN t.tal_total_score END), 0) +
+                                             COALESCE(SUM(CASE WHEN t.jdg_id = 48 THEN t.tal_total_score END), 0)) / 3 AS total_score
                                         FROM candidates c
                                         LEFT JOIN female_talent t ON c.cand_no = t.candidate_no
                                         WHERE c.cand_gender = 'Female'  
@@ -115,16 +134,27 @@
                                     if ($result_female && $result_female->num_rows > 0) {
                                         while ($row = $result_female->fetch_assoc()) {
                                             echo "<tr>
+                                                    <td>{$row['candidate_no']}</td>
                                                     <td>{$row['fullname']}</td>
                                                     <td>{$row['team']}</td>
-                                                    <td>{$row['candidate_no']}</td>
                                                     <td>" . number_format($row['score_judge1'], 2) . "</td>
                                                     <td>" . number_format($row['score_judge2'], 2) . "</td>
                                                     <td>" . number_format($row['score_judge3'], 2) . "</td>
+                                                    <td>" . number_format($row['total_score'], 2) . "</td>
                                                   </tr>";
+
+                                            $total_score = $row['total_score'];
+                                            $candidate_no = $row['candidate_no'];
+                                            
+                                            $insert_sql_female = "
+                                                INSERT INTO female_candidate_total_scores (cand_no, talent_total) 
+                                                VALUES ('$candidate_no', '$total_score')
+                                                ON DUPLICATE KEY UPDATE talent_total = '$total_score';
+                                            ";
+                                            $conn->query($insert_sql_female);
                                         }
                                     } else {
-                                        echo "<tr><td colspan='6'>No data available</td></tr>";
+                                        echo "<tr><td colspan='7'>No data available</td></tr>";
                                     }
 
                                     $conn->close();
