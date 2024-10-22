@@ -14,14 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($stmt) {
                     $stmt->bind_param("iii", $cand_no, $score, $judge_id);
                     if (!$stmt->execute()) {
-                        $_SESSION['error_message'] = "Failed to submit score for candidate {$cand_no}. Error: " . $stmt->error;
+                        $_SESSION['error_message'] = "Failed to submit score for candidate. Error: " . $stmt->error;
                     }
                     $stmt->close();
                 } else {
                     $_SESSION['error_message'] = "Database error: Unable to prepare statement.";
                 }
             } else {
-                $_SESSION['error_message'] = "Invalid score for candidate {$cand_no}.";
+                $_SESSION['error_message'] = "Please complete all required fields before submitting your vote for the candidates.";
             }
         }
 

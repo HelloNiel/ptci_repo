@@ -39,7 +39,6 @@ include '../partial/connection.php';
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Candidate ID</th>
                                         <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Course</th>
@@ -52,13 +51,12 @@ include '../partial/connection.php';
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT cand_id, cand_no, cand_ln, cand_fn, cand_course, cand_team, cand_gender FROM candidates WHERE cand_gender = 'Male'";
+                                    $sql = "SELECT cand_no, cand_ln, cand_fn, cand_course, cand_team, cand_gender FROM candidates WHERE cand_gender = 'Male'";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>";
-                                            echo "<td>{$row['cand_id']}</td>";
                                             echo "<td>{$row['cand_no']}</td>";
                                             echo "<td>{$row['cand_fn']} {$row['cand_ln']}</td>";
                                             echo "<td>{$row['cand_course']}</td>";
@@ -70,7 +68,7 @@ include '../partial/connection.php';
                                             echo "</tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='9' class='text-center'>No male candidates found</td></tr>";
+                                        echo "<tr><td colspan='8' class='text-center'>No male candidates found</td></tr>";
                                     }
                                     ?>
                                 </tbody>

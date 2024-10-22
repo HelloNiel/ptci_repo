@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['error_message'] = "Database error: Unable to prepare statement.";
                 }
             } else {
-                $_SESSION['error_message'] = "Invalid score for candidate {$cand_no}.";
+                $_SESSION['error_message'] = "Please complete all required fields before submitting your vote for the candidates.";
             }
         }
 

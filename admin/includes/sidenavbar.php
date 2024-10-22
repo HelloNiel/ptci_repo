@@ -5,13 +5,13 @@
             <div class="sb-nav-link-icon"><i class="fas fa-gauge-high"></i></div>
             <span class="nav-link-text">Dashboard</span>
         </a>
+        
         <div class="sb-sidenav-menu-heading">Scoreboard</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseScoreboard" aria-expanded="false" aria-controls="collapseScoreboard">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
             Talent Scoreboard
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
-        
         <div class="collapse" id="collapseScoreboard" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
                 <a class="nav-link" href="<?php echo "judge1.php"; ?>">Talent Judge 1</a>
@@ -38,14 +38,32 @@
         </div>
 
         <div class="sb-sidenav-menu-heading">Top Candidates</div>
-        <a class="nav-link" href="<?php echo "top5_qna.php"; ?>"> 
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTopCandidates" aria-expanded="false" aria-controls="collapseTopCandidates">
             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
             Top 5 Candidates
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
-        <a class="nav-link" href="<?php echo "top_finalists.php"; ?>"> 
+        <div class="collapse" id="collapseTopCandidates" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link" href="<?php echo "top5_list.php"; ?>">List of Top 5</a>
+                <a class="nav-link" href="<?php echo "top5_qna_scores.php"; ?>">Q & A Score</a>
+                <a class="nav-link" href="<?php echo "top5_total_scores.php"; ?>">Total Score</a>
+            </nav>
+        </div>
+
+        <div class="sb-sidenav-menu-heading">Top 3 Finalists</div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTop3Finalists" aria-expanded="false" aria-controls="collapseTop3Finalists">
             <div class="sb-nav-link-icon"><i class="fas fa-trophy"></i></div>
             Top 3 Finalists
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
+        <div class="collapse" id="collapseTop3Finalists" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link" href="<?php echo 'top3_list.php'; ?>">List of Top 3</a>
+                <a class="nav-link" href="<?php echo 'top3_qna_scores.php'; ?>">Top 3 Q&A Scores</a>
+                <a class="nav-link" href="<?php echo 'top3_total_scores.php'; ?>">Top 3 Total Scores</a>
+            </nav>
+        </div>
 
         <div class="sb-sidenav-menu-heading">Settings</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStudents" aria-expanded="false" aria-controls="collapseStudents">

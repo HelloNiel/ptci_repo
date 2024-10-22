@@ -57,6 +57,7 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>Rank</th>
                                 <th>Candidate No</th>
                                 <th>Full Name</th>
                                 <th>Team</th>
@@ -69,8 +70,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while ($row = $result_male_scores->fetch_assoc()) { ?>
+                            <?php 
+                            $rank = 1; 
+                            while ($row = $result_male_scores->fetch_assoc()) { ?>
                                 <tr>
+                                    <td><?php echo $rank++; ?></td>
                                     <td><?php echo $row['cand_no']; ?></td>
                                     <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
                                     <td><?php echo $row['cand_team']; ?></td>
@@ -122,6 +126,7 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>Rank</th>
                                 <th>Candidate No</th>
                                 <th>Full Name</th>
                                 <th>Team</th>
@@ -134,8 +139,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while ($row = $result_female_scores->fetch_assoc()) { ?>
+                            <?php 
+                            $rank = 1;
+                            while ($row = $result_female_scores->fetch_assoc()) { ?>
                                 <tr>
+                                    <td><?php echo $rank++; ?></td>
                                     <td><?php echo $row['cand_no']; ?></td>
                                     <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
                                     <td><?php echo $row['cand_team']; ?></td>
