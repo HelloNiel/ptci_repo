@@ -18,6 +18,10 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Top 5 Cnadidates</h1>
                     
+                    <div class="mb-3">
+                        <a href="./function/top5_export.php" class="btn btn-primary">Download Scores as Excel</a>
+                    </div>
+
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>

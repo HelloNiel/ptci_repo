@@ -18,11 +18,12 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Top 3 Candidates</h1>
                     
+                    <div class="mb-3">
+                        <a href="./function/top3_export.php" class="btn btn-primary">Download Scores as Excel</a>
+                    </div>
+
                     <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Male Candidates Scores
-                        </div>
+                        <div class="card-header">Male Candidates Scores</div>
                         <div class="card-body">
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -118,10 +119,7 @@
                     </div>
 
                     <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Female Candidates Scores
-                        </div>
+                        <div class="card-header">Female Candidates Scores</div>
                         <div class="card-body">
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -172,7 +170,7 @@
                                                 $row_female['judge_4_score'] !== null ? $row_female['judge_4_score'] : 0,
                                                 $row_female['judge_5_score'] !== null ? $row_female['judge_5_score'] : 0,
                                             ];
-                                            $totalScore_female = array_sum($scores_female) / (count($scores_female) * 10) * 100;
+                                            $totalScoreFemale = array_sum($scores_female) / (count($scores_female) * 10) * 100;
 
                                             echo "<tr>
                                                     <td>{$rank_female}</td>
@@ -184,7 +182,7 @@
                                                     <td>" . ($row_female['judge_3_score'] !== null ? $row_female['judge_3_score'] : 'N/A') . "</td>
                                                     <td>" . ($row_female['judge_4_score'] !== null ? $row_female['judge_4_score'] : 'N/A') . "</td>
                                                     <td>" . ($row_female['judge_5_score'] !== null ? $row_female['judge_5_score'] : 'N/A') . "</td>
-                                                    <td>" . number_format($totalScore_female, 2) . "%</td>
+                                                    <td>" . number_format($totalScoreFemale, 2) . "%</td>
                                                   </tr>";
                                             $rank_female++;
                                         }
@@ -196,7 +194,6 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
             </main>
         </div>
