@@ -54,10 +54,10 @@
             </nav>
         </div>
 
-        <div class="sb-sidenav-menu-heading">Top 3 Candidates</div>
+        <div class="sb-sidenav-menu-heading">Finalists</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTop3" aria-expanded="false" aria-controls="collapseTop3">
             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
-            Top 3 Candidates
+            Top 3 Finalists
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
         <div class="collapse" id="collapseTop3" aria-labelledby="headingTop3" data-bs-parent="#sidenavAccordion">

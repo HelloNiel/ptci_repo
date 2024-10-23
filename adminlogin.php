@@ -63,18 +63,17 @@
 				<div class="login-container">
 					<img src="img/ptci.png" alt="Logo" class="logo">
 					<h2 class="text-center">Login</h2>
-					<form>
-                    <a><hr class="divider" /></a>
+					<form method="POST" action="admin_login_function.php">
+						<a><hr class="divider" /></a>
 						<div class="form-group">
-							<input type="text" name="username" class="form-control" placeholder="Username">
+							<input type="text" name="username" class="form-control" placeholder="Username" required>
 						</div>
 						<div class="form-group">
-							<input type="password" name="password" class="form-control" placeholder="Password">
+							<input type="password" name="password" class="form-control" placeholder="Password" required>
 						</div>
-						<!--button type="submit" class="btn btn-primary btn-block">Login</button real code to submit--> 
-						<a href="admin/dashboard.php" class="btn btn-primary btn-block">Login</a><!--for demo only-->
-                        <a><hr class="divider" /></a>
-                        <a href="javascript:history.back()" class="btn btn-secondary btn-block">Back</a>
+						<button type="submit" class="btn btn-primary btn-block">Login</button>
+						<a><hr class="divider" /></a>
+						<a href="javascript:history.back()" class="btn btn-secondary btn-block">Back</a>
 					</form>
 				</div>
 			</div>

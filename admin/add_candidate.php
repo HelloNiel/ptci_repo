@@ -7,6 +7,8 @@
     <?php 
     session_start();
     include 'includes/header.php'; 
+    include '../session_check.php'; 
+    checkLogin();
     ?>
     <style>
         body {

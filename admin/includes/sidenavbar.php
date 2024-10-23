@@ -48,6 +48,7 @@
                 <a class="nav-link" href="<?php echo "top5_list.php"; ?>">List of Top 5</a>
                 <a class="nav-link" href="<?php echo "top5_qna_scores.php"; ?>">Q & A Score</a>
                 <a class="nav-link" href="<?php echo "top5_total_scores.php"; ?>">Total Score</a>
+                <a class="nav-link" href="<?php echo "top5_finalists.php"; ?>">Top 5 Finalists</a>
             </nav>
         </div>
 
@@ -77,7 +78,11 @@
         </div>
         <a class="nav-link" href="<?php echo "add_judge.php"; ?>"> 
             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-            Add Judge
+            Add Judge Account
+        </a>
+        <a class="nav-link" href="<?php echo "add_admin.php"; ?>"> 
+            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+            Add Admin Account
         </a>
     </div>
 </div>

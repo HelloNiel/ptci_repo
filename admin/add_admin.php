@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Judge</title>
-    <?php include 'includes/header.php'; 
-        include '../session_check.php'; 
-        checkLogin();?>
+    <title>Add Admin</title>
+    <?php include 'includes/header.php'; ?>
 </head>
 <body>
     <?php
@@ -23,7 +21,7 @@
                 <?php include 'includes/topnavbar.php'; ?>
             </nav>
             <div class="container mt-4">
-                <h1>Add Judge</h1>
+                <h1>Add Admin</h1>
 
                 <?php if (isset($_SESSION['success_message'])): ?>
                     <div class="alert alert-success" role="alert">
@@ -43,20 +41,20 @@
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="./function/process_judge.php">
+                <form method="POST" action="./function/process_admin.php">
                     <div class="mb-3">
-                        <label for="jdg_name" class="form-label">Judge Name</label>
-                        <input type="text" class="form-control" id="jdg_name" name="jdg_name" required>
+                        <label for="admin_name" class="form-label">Admin Name</label>
+                        <input type="text" class="form-control" id="admin_name" name="admin_name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="jdg_username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="jdg_username" name="jdg_username" required>
+                        <label for="admin_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="admin_username" name="admin_username" required>
                     </div>
                     <div class="mb-3">
-                        <label for="jdg_pass" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="jdg_pass" name="jdg_pass" required>
+                        <label for="admin_pass" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="admin_pass" name="admin_pass" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Judge</button>
+                    <button type="submit" class="btn btn-primary">Add Admin</button>
                 </form>
             </div>
 

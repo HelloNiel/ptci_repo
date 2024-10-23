@@ -5,7 +5,10 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'includes/header.php'; ?>
+    <?php include 'includes/header.php'; 
+        include '../session_check.php'; 
+        checkLogin();
+    ?>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">

@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include'includes/header.php'; 
-        include '../session_check.php'; 
-        checkLogin();
-    ?>
+    <?php include'includes/header.php'; ?>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -19,7 +16,11 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Top 5 Candidates</h1>
+                    <h1 class="mt-4">Top 5 Finalists</h1>
+                    
+                    <div class="mb-3">
+                        <a href="./function/top5_export.php" class="btn btn-primary">Download Scores as Excel</a>
+                    </div>
 
                     <div class="card mb-4">
                         <div class="card-header">
