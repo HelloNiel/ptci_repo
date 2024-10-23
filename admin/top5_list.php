@@ -4,8 +4,6 @@
     <?php 
     session_start();
     include 'includes/header.php'; 
-    include '../session_check.php'; 
-    checkLogin();
     ?>
 </head>
 <body class="sb-nav-fixed">

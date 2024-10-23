@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Judge</title>
-    <?php include 'includes/header.php'; 
-        include '../session_check.php'; 
-        checkLogin();?>
+    <?php include 'includes/header.php'; ?>
 </head>
 <body>
     <?php

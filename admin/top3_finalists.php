@@ -6,8 +6,6 @@ session_start();
 <html lang="en">
 <head>
     <?php include 'includes/header.php'; 
-        include '../session_check.php'; 
-        checkLogin();
     ?>
 </head>
 <body class="sb-nav-fixed">

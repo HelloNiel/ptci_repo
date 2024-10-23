@@ -43,10 +43,6 @@
 
                 <form method="POST" action="./function/process_admin.php">
                     <div class="mb-3">
-                        <label for="admin_name" class="form-label">Admin Name</label>
-                        <input type="text" class="form-control" id="admin_name" name="admin_name" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="admin_username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="admin_username" name="admin_username" required>
                     </div>
