@@ -24,7 +24,6 @@
                     <?php
                     include '../partial/connection.php';
 
-
                     if (isset($_SESSION['success_message'])) {
                         echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
                         unset($_SESSION['success_message']);
@@ -32,7 +31,12 @@
 
                     // Male
                     $query_male_scores = "
-                        SELECT c.cand_no, 
+                        SELECT ROW_NUMBER() OVER (ORDER BY (m.talent_total * 0.10 + 
+                                                            m.unif_total * 0.20 + 
+                                                            m.swim_total * 0.20 + 
+                                                            m.barong_total * 0.20 + 
+                                                            m.qna_total * 0.30) / 10 * 100 DESC) AS rank,
+                               c.cand_no, 
                                c.cand_fn, 
                                c.cand_ln, 
                                c.cand_team,
@@ -68,6 +72,7 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Rank</th>
                                     <th>Candidate No</th>
                                     <th>Full Name</th>
                                     <th>Team</th>
@@ -82,6 +87,7 @@
                             <tbody>
                                 <?php while ($row = $result_male_scores->fetch_assoc()) { ?>
                                     <tr>
+                                        <td><?php echo $row['rank']; ?></td>
                                         <td><?php echo $row['cand_no']; ?></td>
                                         <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
                                         <td><?php echo $row['cand_team']; ?></td>
@@ -105,7 +111,12 @@
                     <?php
                     // Female
                     $query_female_scores = "
-                        SELECT c.cand_no, 
+                        SELECT ROW_NUMBER() OVER (ORDER BY (f.talent_total * 0.10 + 
+                                                            f.unif_total * 0.20 + 
+                                                            f.swim_total * 0.20 + 
+                                                            f.gown_total * 0.20 + 
+                                                            f.qna_total * 0.30) / 10 * 100 DESC) AS rank,
+                               c.cand_no, 
                                c.cand_fn, 
                                c.cand_ln, 
                                c.cand_team,
@@ -140,6 +151,7 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Rank</th>
                                     <th>Candidate No</th>
                                     <th>Full Name</th>
                                     <th>Team</th>
@@ -154,6 +166,7 @@
                             <tbody>
                                 <?php while ($row = $result_female_scores->fetch_assoc()) { ?>
                                     <tr>
+                                        <td><?php echo $row['rank']; ?></td>
                                         <td><?php echo $row['cand_no']; ?></td>
                                         <td><?php echo $row['cand_fn'] . ' ' . $row['cand_ln']; ?></td>
                                         <td><?php echo $row['cand_team']; ?></td>
@@ -173,11 +186,9 @@
                         </table>
                         <button type="submit" class="btn btn-primary">Save Top 5 Female Candidates</button>
                     </form>
-
                 </div>
             </main>
         </div>
     </div>
-    <?php include 'includes/script.php'; ?>
 </body>
 </html>

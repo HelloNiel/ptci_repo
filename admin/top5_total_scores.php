@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'includes/header.php'; ?>
+    <?php include'includes/header.php'; ?>
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <?php include 'includes/topnavbar.php'; ?>
+        <?php include'includes/topnavbar.php'; ?>
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                <?php include 'includes/sidenavbar.php'; ?>
+                <?php include'includes/sidenavbar.php' ?>
             </nav>
         </div>
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Top 5 Cnadidates</h1>
+                    <h1 class="mt-4">Top 5 Candidates</h1>
                     
                     <div class="mb-3">
                         <a href="./function/top5_export.php" class="btn btn-primary">Download Scores as Excel</a>

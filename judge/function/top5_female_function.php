@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($judge_id !== null) {
         foreach ($_POST['score'] as $cand_no => $score) {
-            if (!empty($score) && is_numeric($score) && $score >= 7 && $score <= 10) {
+            if (!empty($score) && is_numeric($score) && $score >= 6 && $score <= 10) {
                 $stmt = $conn->prepare("INSERT INTO top5_scores_female (cand_no, score, judge_id, cand_fn, cand_ln, cand_team) 
                                         VALUES (?, ?, ?, ?, ?, ?)
                                         ON DUPLICATE KEY UPDATE score = VALUES(score)");
@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        
         if (!isset($_SESSION['error_message'])) {
             $_SESSION['success_message'] = "Scores submitted successfully!";
         }
@@ -50,6 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
-header("Location: ../top5_male.php");
+header("Location: ../top5_female.php"); // Adjusted redirection to female page
 exit();
 ?>

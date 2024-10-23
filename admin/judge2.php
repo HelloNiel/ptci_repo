@@ -33,6 +33,7 @@
                     function displayCandidatesScores($gender, $jdg_id) {
                         global $conn;
                         $table_name = $gender === 'Female' ? 'female_talent' : 'male_talent';
+                        
                         $stmt = $conn->prepare("
                             SELECT CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
                                    t.tal_mastery, 
@@ -45,9 +46,10 @@
                                    c.cand_team AS team
                             FROM $table_name t
                             JOIN candidates c ON t.cand_id = c.cand_id
-                            WHERE t.jdg_id = ? AND c.cand_gender = ?
+                            WHERE t.jdg_id = ?
                         ");
-                        $stmt->bind_param("is", $jdg_id, $gender);
+                        
+                        $stmt->bind_param("i", $jdg_id);
                         $stmt->execute();
                         $result = $stmt->get_result();
 

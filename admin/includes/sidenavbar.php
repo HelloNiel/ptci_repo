@@ -59,9 +59,7 @@
         </a>
         <div class="collapse" id="collapseTop3Finalists" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-                <a class="nav-link" href="<?php echo 'top3_list.php'; ?>">List of Top 3</a>
-                <a class="nav-link" href="<?php echo 'top3_qna_scores.php'; ?>">Top 3 Q&A Scores</a>
-                <a class="nav-link" href="<?php echo 'top3_total_scores.php'; ?>">Top 3 Total Scores</a>
+                <a class="nav-link" href="<?php echo 'top3_finalists.php'; ?>">List of Top 3 Finalists</a>
             </nav>
         </div>
 

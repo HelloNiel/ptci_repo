@@ -30,9 +30,9 @@ session_start();
                         unset($_SESSION['error_message']);
                     }
                     ?>
-                    <h1 class="mt-4">Top 5 Female Candidates</h1>
+                    <h1 class="mt-4">Top 5 Female</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Top 5 Female Candidates</li>
+                        <li class="breadcrumb-item active">Top 5 Candidates</li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-body">
@@ -51,7 +51,7 @@ session_start();
                                         <?php
                                         include '../partial/connection.php';
 
-                                        $sql = "SELECT `cand_no`, `cand_fn`, `cand_ln`, `cand_team` FROM `top5_candidate_female` WHERE 1";
+                                        $sql = "SELECT `cand_no`, `cand_fn`, `cand_ln`, `cand_team` FROM `top5_candidate_female` WHERE 1"; // Adjust the table name
                                         $result = $conn->query($sql);
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
@@ -63,6 +63,7 @@ session_start();
                                                     <td>
                                                         <select class='form-select' name='score[{$row['cand_no']}]'>
                                                             <option value=''>Select Score</option>
+                                                            <option value='6'>6</option>
                                                             <option value='7'>7</option>
                                                             <option value='8'>8</option>
                                                             <option value='9'>9</option>

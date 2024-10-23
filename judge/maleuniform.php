@@ -19,7 +19,7 @@ session_start();
         </div>
         <div id="layoutSidenav_content">
             <main>
-                <div class="container-fluid px-4">
+                <div class="container-fluid px-4 mt-4">
                     <?php
                     if (isset($_SESSION['success_message'])) {
                         echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';

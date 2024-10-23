@@ -62,8 +62,7 @@
         </a>
         <div class="collapse" id="collapseTop3" aria-labelledby="headingTop3" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-                <a class="nav-link" href="<?php echo 'top3_male.php'; ?>">Top 3 Male</a>
-                <a class="nav-link" href="<?php echo 'top3_female.php'; ?>">Top 3 Female</a>
+                <a class="nav-link" href="<?php echo 'top3_result.php'; ?>">Top 3 Finalists</a>
             </nav>
         </div>
 

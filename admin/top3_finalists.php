@@ -21,6 +21,11 @@ session_start();
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Top 3 Candidates</h1>
+
+                    <div class="mb-3">
+                        <a href="./function/top3_export.php" class="btn btn-primary">Download Scores as Excel</a>
+                    </div>
+
                     <?php
                     if (isset($_SESSION['success'])) {
                         echo '<div class="alert alert-success" role="alert">' . $_SESSION['success'] . '</div>';
@@ -118,10 +123,11 @@ session_start();
                                                         <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
                                                         <td>" . number_format($totalScore, 2) . "%</td>
                                                       </tr>";
-                                              
+
                                                 echo '<input type="hidden" name="cand_no[]" value="' . $row['cand_no'] . '">
                                                       <input type="hidden" name="cand_fn[]" value="' . $row['full_name'] . '">
-                                                      <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">';
+                                                      <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">
+                                                      <input type="hidden" name="total_score[]" value="' . number_format($totalScore, 2) . '">';
                                             }
                                         } else {
                                             echo "<tr><td colspan='10'>No scores available.</td></tr>";
@@ -129,7 +135,7 @@ session_start();
                                         ?>
                                     </tbody>
                                 </table>
-                                <button type="submit" class="btn btn-primary">Save Top 3 Male Candidates</button>
+                                <button type="submit" class="btn btn-primary">Send to Judge</button>
                             </form>
                         </div>
                     </div>
@@ -183,32 +189,33 @@ session_start();
 
                                         $result_female = $conn->query($query_female);
                                         if ($result_female && $result_female->num_rows > 0) {
-                                            while ($row = $result_female->fetch_assoc()) {
+                                            while ($row_female = $result_female->fetch_assoc()) {
                                                 $scores_female = [
-                                                    $row['judge_1_score'] !== null ? $row['judge_1_score'] : 0,
-                                                    $row['judge_2_score'] !== null ? $row['judge_2_score'] : 0,
-                                                    $row['judge_3_score'] !== null ? $row['judge_3_score'] : 0,
-                                                    $row['judge_4_score'] !== null ? $row['judge_4_score'] : 0,
-                                                    $row['judge_5_score'] !== null ? $row['judge_5_score'] : 0,
+                                                    $row_female['judge_1_score'] !== null ? $row_female['judge_1_score'] : 0,
+                                                    $row_female['judge_2_score'] !== null ? $row_female['judge_2_score'] : 0,
+                                                    $row_female['judge_3_score'] !== null ? $row_female['judge_3_score'] : 0,
+                                                    $row_female['judge_4_score'] !== null ? $row_female['judge_4_score'] : 0,
+                                                    $row_female['judge_5_score'] !== null ? $row_female['judge_5_score'] : 0,
                                                 ];
                                                 $totalScoreFemale = array_sum($scores_female) / (count($scores_female) * 10) * 100;
 
                                                 echo "<tr>
-                                                        <td>{$row['rank']}</td>
-                                                        <td>{$row['cand_no']}</td>
-                                                        <td>{$row['full_name']}</td>
-                                                        <td>{$row['cand_team']}</td>
-                                                        <td>" . ($row['judge_1_score'] !== null ? $row['judge_1_score'] : 'N/A') . "</td>
-                                                        <td>" . ($row['judge_2_score'] !== null ? $row['judge_2_score'] : 'N/A') . "</td>
-                                                        <td>" . ($row['judge_3_score'] !== null ? $row['judge_3_score'] : 'N/A') . "</td>
-                                                        <td>" . ($row['judge_4_score'] !== null ? $row['judge_4_score'] : 'N/A') . "</td>
-                                                        <td>" . ($row['judge_5_score'] !== null ? $row['judge_5_score'] : 'N/A') . "</td>
+                                                        <td>{$row_female['rank']}</td>
+                                                        <td>{$row_female['cand_no']}</td>
+                                                        <td>{$row_female['full_name']}</td>
+                                                        <td>{$row_female['cand_team']}</td>
+                                                        <td>" . ($row_female['judge_1_score'] !== null ? $row_female['judge_1_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row_female['judge_2_score'] !== null ? $row_female['judge_2_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row_female['judge_3_score'] !== null ? $row_female['judge_3_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row_female['judge_4_score'] !== null ? $row_female['judge_4_score'] : 'N/A') . "</td>
+                                                        <td>" . ($row_female['judge_5_score'] !== null ? $row_female['judge_5_score'] : 'N/A') . "</td>
                                                         <td>" . number_format($totalScoreFemale, 2) . "%</td>
                                                       </tr>";
 
-                                                echo '<input type="hidden" name="cand_no[]" value="' . $row['cand_no'] . '">
-                                                      <input type="hidden" name="cand_fn[]" value="' . $row['full_name'] . '">
-                                                      <input type="hidden" name="cand_team[]" value="' . $row['cand_team'] . '">';
+                                                echo '<input type="hidden" name="cand_no[]" value="' . $row_female['cand_no'] . '">
+                                                      <input type="hidden" name="cand_fn[]" value="' . $row_female['full_name'] . '">
+                                                      <input type="hidden" name="cand_team[]" value="' . $row_female['cand_team'] . '">
+                                                      <input type="hidden" name="total_score[]" value="' . number_format($totalScoreFemale, 2) . '">';
                                             }
                                         } else {
                                             echo "<tr><td colspan='10'>No scores available.</td></tr>";
@@ -216,7 +223,7 @@ session_start();
                                         ?>
                                     </tbody>
                                 </table>
-                                <button type="submit" class="btn btn-primary">Save Top 3 Female Candidates</button>
+                                <button type="submit" class="btn btn-primary">Send to Judge</button>
                             </form>
                         </div>
                     </div>

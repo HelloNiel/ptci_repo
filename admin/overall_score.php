@@ -27,6 +27,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Rank</th>
                                         <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Team</th>
@@ -42,6 +43,7 @@
 
                                     $sql_male = "
                                         SELECT 
+                                            RANK() OVER (ORDER BY total_score DESC) AS rank,
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
                                             c.cand_team AS team, 
                                             c.cand_no AS candidate_no,
@@ -55,6 +57,7 @@
                                         LEFT JOIN male_talent t ON c.cand_no = t.candidate_no
                                         WHERE c.cand_gender = 'Male'  
                                         GROUP BY c.cand_no, c.cand_fn, c.cand_ln, c.cand_team
+                                        ORDER BY total_score DESC
                                     ";
 
                                     $result_male = $conn->query($sql_male);
@@ -62,6 +65,7 @@
                                     if ($result_male && $result_male->num_rows > 0) {
                                         while ($row = $result_male->fetch_assoc()) {
                                             echo "<tr>
+                                                    <td>{$row['rank']}</td>
                                                     <td>{$row['candidate_no']}</td>
                                                     <td>{$row['fullname']}</td>
                                                     <td>{$row['team']}</td>
@@ -82,7 +86,7 @@
                                             $conn->query($insert_sql);
                                         }
                                     } else {
-                                        echo "<tr><td colspan='7'>No data available</td></tr>";
+                                        echo "<tr><td colspan='8'>No data available</td></tr>";
                                     }
                                     ?>
                                 </tbody>
@@ -101,6 +105,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Rank</th>
                                         <th>Candidate No</th>
                                         <th>Full Name</th>
                                         <th>Team</th>
@@ -114,6 +119,7 @@
                                     <?php
                                     $sql_female = "
                                         SELECT 
+                                            RANK() OVER (ORDER BY total_score DESC) AS rank,
                                             CONCAT(c.cand_fn, ' ', c.cand_ln) AS fullname, 
                                             c.cand_team AS team, 
                                             c.cand_no AS candidate_no,
@@ -127,6 +133,7 @@
                                         LEFT JOIN female_talent t ON c.cand_no = t.candidate_no
                                         WHERE c.cand_gender = 'Female'  
                                         GROUP BY c.cand_no, c.cand_fn, c.cand_ln, c.cand_team
+                                        ORDER BY total_score DESC
                                     ";
 
                                     $result_female = $conn->query($sql_female);
@@ -134,6 +141,7 @@
                                     if ($result_female && $result_female->num_rows > 0) {
                                         while ($row = $result_female->fetch_assoc()) {
                                             echo "<tr>
+                                                    <td>{$row['rank']}</td>
                                                     <td>{$row['candidate_no']}</td>
                                                     <td>{$row['fullname']}</td>
                                                     <td>{$row['team']}</td>
@@ -154,7 +162,7 @@
                                             $conn->query($insert_sql_female);
                                         }
                                     } else {
-                                        echo "<tr><td colspan='7'>No data available</td></tr>";
+                                        echo "<tr><td colspan='8'>No data available</td></tr>";
                                     }
 
                                     $conn->close();

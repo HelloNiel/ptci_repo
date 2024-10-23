@@ -30,7 +30,7 @@ session_start();
                         unset($_SESSION['error_message']);
                     }
                     ?>
-                    <h1 class="mt-4">Top 5 Candidates</h1>
+                    <h1 class="mt-4">Top 5 Male</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Top 5 Candidates</li>
                     </ol>
@@ -63,6 +63,7 @@ session_start();
                                                     <td>
                                                         <select class='form-select' name='score[{$row['cand_no']}]'>
                                                             <option value=''>Select Score</option>
+                                                            <option value='6'>6</option>
                                                             <option value='7'>7</option>
                                                             <option value='8'>8</option>
                                                             <option value='9'>9</option>
