@@ -6,7 +6,7 @@
             <span class="nav-link-text">Home</span>
         </a>
         <div class="sb-sidenav-menu-heading">Candidates</div>
-        <a class="nav-link" href="<?php echo "candidatesinfo.php" ?>">
+        <a class="nav-link" href="<?php echo "candidatesinfo.php" ?>" target="_blank">
             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
             <span class="nav-link-text">Candidates Info</span>
         </a>
